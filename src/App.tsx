@@ -1,13 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {TempaiService} from "./utils/tempaiService";
 
 const App: React.FC = () => {
+
+  const service =  new TempaiService()
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <img src={logo} className="App-logo" alt="logo"/>
+        <p  onClick={() => service.do()} >
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a
