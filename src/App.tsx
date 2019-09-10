@@ -6,23 +6,20 @@ import {TempaiService} from "./utils/tempaiService";
 const App: React.FC = () => {
 
   const service =  new TempaiService()
+  let hand = ''
 
+  var bStyle = {
+    margin: '10px 0',
+    width: '75px',
+    height: '20px',
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo"/>
-        <p  onClick={() => service.do()} >
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+        <input defaultValue={''} onChange={(e) => hand = e.target.value}/>
+        <button style={bStyle}  onClick={() => console.log(service.find(hand))} />
       </header>
     </div>
   );
