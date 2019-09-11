@@ -19,7 +19,7 @@ const App: React.FC = () => {
       <header className="App-header">
 
         <input defaultValue={''} onChange={(e) => hand = e.target.value}/>
-        <button style={bStyle}  onClick={() => console.log(service.find(hand))} />
+        <button style={bStyle}  onClick={() => console.log(service.hasTempai(hand))} />
       </header>
     </div>
   );

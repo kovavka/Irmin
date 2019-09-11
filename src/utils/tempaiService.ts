@@ -16,7 +16,7 @@ interface SuitStructure {
     sets: number[][]
     unusedTiles: number[]
     waitPatterns: WaitPattern[]
-    pairs: number[]
+    pair: number | undefined
     remainingTiles: number[]
 }
 
@@ -27,39 +27,210 @@ interface HandStructure {
     honors?: number[]
 }
 
-interface HandWaitPatterns {
-    manSuit?: SuitStructure[]
-    pinSuit?: SuitStructure[]
-    souSuit?: SuitStructure[]
-    honors?: SuitStructure[]
+interface HandWaitStructure {
+    man?: SuitStructure
+    pin?: SuitStructure
+    sou?: SuitStructure
+    honors?: SuitStructure
 }
 
 export class TempaiService {
-    find(hand: string): boolean {
+    hasTempai(hand: string): boolean {
         let suits = this.getSuits(hand)
 
         if (this.isChiitoi(suits) || this.isKokushiMuso(suits, hand)) {
             return true
         }
 
-        let handPattern: HandWaitPatterns = {}
+        let manSuits = suits.manSuit && this.run([], this.getSimpleSuitStructure(suits.manSuit))
+        let pinSuits = suits.pinSuit && this.run([], this.getSimpleSuitStructure(suits.pinSuit))
+        let souSuits = suits.souSuit && this.run([], this.getSimpleSuitStructure(suits.souSuit))
+        let honors = suits.honors && this.run([], this.getSimpleSuitStructure(suits.honors))
 
-        if (suits.manSuit) {
-            handPattern.manSuit = this.run([], this.getSimpleSuitStructure(suits.manSuit))
-        }
-        if (suits.pinSuit) {
-            handPattern.pinSuit = this.run([], this.getSimpleSuitStructure(suits.pinSuit))
-        }
-        if (suits.souSuit) {
-            handPattern.souSuit = this.run([], this.getSimpleSuitStructure(suits.souSuit))
-        }
-        if (suits.honors) {
-            handPattern.honors = this.run([], this.getSimpleSuitStructure(suits.honors), true)
+        let possibleManSuits = this.getPossibleStructures(manSuits)
+        let possiblePinSuits = this.getPossibleStructures(pinSuits)
+        let possibleSouSuits = this.getPossibleStructures(souSuits)
+        let possibleHonors = this.getPossibleStructures(honors)
+
+        if (
+            !!suits.manSuit !== (possibleManSuits.length !== 0) ||
+            !!suits.pinSuit !== (possiblePinSuits.length !== 0) ||
+            !!suits.souSuit !== (possibleSouSuits.length !== 0) ||
+            !!suits.honors !== (possibleHonors.length !== 0)
+        ) {
+            return false
         }
 
-        console.log(handPattern)
-        return  true
+        let handWaitStructures: HandWaitStructure[] =
+            this.processPossibleManSuits(possibleManSuits, possiblePinSuits, possibleSouSuits, possibleHonors)
+
+        for (let handWaitStructure of handWaitStructures) {
+            if (this.isReadyHand(handWaitStructure)) {
+                return true
+            }
+        }
+
+        console.log(handWaitStructures)
+        return false
     }
+
+    private processPossibleManSuits(
+        possibleManSuits: SuitStructure[],
+        possiblePinSuits: SuitStructure[],
+        possibleSouSuits: SuitStructure[],
+        possibleHonors: SuitStructure[]
+    ) {
+        if (!possibleManSuits.length) {
+            return this.processPossiblePinSuits(undefined, possiblePinSuits, possibleSouSuits, possibleHonors)
+        }
+
+        let handPatterns: HandWaitStructure[] = []
+        for (let manStructure of possibleManSuits) {
+            handPatterns.push(...this.processPossiblePinSuits(manStructure, possiblePinSuits, possibleSouSuits, possibleHonors))
+        }
+        return handPatterns
+    }
+
+    private processPossiblePinSuits(
+        manStructure: SuitStructure | undefined,
+        possiblePinSuits: SuitStructure[],
+        possibleSouSuits: SuitStructure[],
+        possibleHonors: SuitStructure[]
+    ) {
+        if (!possiblePinSuits.length) {
+            return this.processPossibleSouSuits(manStructure, undefined, possibleSouSuits, possibleHonors)
+        }
+
+        let handPatterns: HandWaitStructure[] = []
+        for (let pinStructure of possiblePinSuits) {
+            handPatterns.push(...this.processPossibleSouSuits(manStructure, pinStructure, possibleSouSuits, possibleHonors))
+        }
+        return handPatterns
+    }
+
+    private processPossibleSouSuits(
+        manStructure: SuitStructure | undefined,
+        pinStructure: SuitStructure | undefined,
+        possibleSouSuits: SuitStructure[],
+        possibleHonors: SuitStructure[]
+    ) {
+        if (!possibleSouSuits.length) {
+            return this.processPossibleHonors(manStructure, pinStructure, undefined, possibleHonors)
+        }
+
+        let handPatterns: HandWaitStructure[] = []
+        for (let souStructure of possibleSouSuits) {
+            handPatterns.push(...this.processPossibleHonors(manStructure, pinStructure, souStructure, possibleHonors))
+        }
+        return handPatterns
+    }
+
+    private processPossibleHonors(
+        manStructure: SuitStructure | undefined,
+        pinStructure: SuitStructure | undefined,
+        souStructure: SuitStructure | undefined,
+        possibleHonors: SuitStructure[]
+    ) {
+        if (!possibleHonors.length) {
+            return [
+                <HandWaitStructure> {
+                man:  manStructure,
+                pin:  pinStructure,
+                sou:  souStructure,
+            }]
+        }
+
+        let handPatterns: HandWaitStructure[] = []
+        for (let honorStructure of possibleHonors) {
+            handPatterns.push(<HandWaitStructure> {
+                man:  manStructure,
+                pin:  pinStructure,
+                sou:  souStructure,
+                honors:  honorStructure,
+            })
+        }
+
+        return handPatterns
+    }
+
+    private isReadyHand(hand: HandWaitStructure) {
+        let pairsCount = 0
+        let waits: WaitPattern[] = []
+        if (hand.man) {
+            if (hand.man.pair) {
+                pairsCount++
+            }
+            waits.push(...hand.man.waitPatterns)
+        }
+        if (hand.pin) {
+            if (hand.pin.pair) {
+                pairsCount++
+            }
+            waits.push(...hand.pin.waitPatterns)
+        }
+        if (hand.sou) {
+            if (hand.sou.pair) {
+                pairsCount++
+            }
+            waits.push(...hand.sou.waitPatterns)
+        }
+        if (hand.honors) {
+            if (hand.honors.pair) {
+                pairsCount++
+            }
+            waits.push(...hand.honors.waitPatterns)
+        }
+
+        if (pairsCount > 1 || waits.length > 2 || waits.length === 0) {
+            return false
+        }
+
+        if (
+            pairsCount === 0 &&
+            (waits.length === 1 && waits[0].type === WaitPatternType.TANKI ||
+                waits.length === 2 && waits.every(pattern => pattern.type === WaitPatternType.SHANPON))
+        ) {
+            return true
+        }
+
+        if (
+            pairsCount === 1 &&
+            [WaitPatternType.KANCHAN, WaitPatternType.RYANMEN_PENCHAN].includes(waits[0].type)
+        ) {
+            return true
+        }
+
+        return false
+    }
+
+    private getPossibleStructures(structures: SuitStructure[] | undefined): SuitStructure[] {
+        if (!structures || !structures.length) {
+            return []
+        }
+
+        return structures.filter(structure => this.isPossibleWaitPatterns(structure.waitPatterns))
+    }
+
+    private isPossibleWaitPatterns(patterns: WaitPattern[]): boolean {
+        if (!patterns.length) {
+            return true
+        }
+        if (patterns.length > 2) {
+            return false
+        }
+        if (
+            patterns.length === 1 &&
+            [WaitPatternType.TANKI, WaitPatternType.KANCHAN, WaitPatternType.RYANMEN_PENCHAN].includes(patterns[0].type)
+        ) {
+            return true
+        }
+        if (patterns.length === 2 && patterns.every(pattern => pattern.type === WaitPatternType.SHANPON)) {
+            return true
+        }
+        return false
+    }
+
+
 
     //OrSimpleTankiRyanpeikou
     private isChiitoi(suits: HandStructure) {
@@ -139,7 +310,7 @@ export class TempaiService {
             sets: [],
             unusedTiles: [],
             waitPatterns: [],
-            pairs: [],
+            pair: undefined,
             remainingTiles: tiles,
         }
     }
@@ -189,36 +360,48 @@ export class TempaiService {
 
         if (!possibleStructures.length) {
             let data = this.getPairsAndWaitings(structure.unusedTiles, isHonors)
-            structure.pairs = data.pairs
+            structure.pair = data.pair
             structure.waitPatterns = data.waitPatterns
             allVariations.push(structure)
         }
     }
 
-    private getPairsAndWaitings(unusedTiles: number[], isHonors: boolean): {pairs: number[], waitPatterns: WaitPattern[]} {
+    private getPairsAndWaitings(unusedTiles: number[], isHonors: boolean): {pair: number | undefined, waitPatterns: WaitPattern[]} {
         let allPairs = this.getPairs(unusedTiles)
 
-        let availablePairs: number[] = []
-        let waitPatterns: WaitPattern[] = []
+        let availablePair: number | undefined
         let remainingTiles = unusedTiles.slice(0)
 
-        //there is no pair if wait pattern is shanpon or hand has too mush pairs -> it's waitings
+        //if wait pattern is shanpon or hand has too mush pairs or pair and other tiles -> there is no pair, it's waitings
         if (allPairs.length === 1) {
-            availablePairs = allPairs
-            let pairTiles = allPairs[0]
-            remainingTiles = this.nextTiles(remainingTiles, pairTiles, pairTiles)
+            availablePair = allPairs[0]
+            let pairTile = allPairs[0]
+            remainingTiles = this.nextTiles(remainingTiles, pairTile, pairTile)
         }
         if (!remainingTiles.length) {
-            return {pairs: availablePairs, waitPatterns: waitPatterns}
+            return {pair: availablePair, waitPatterns: []}
         }
 
+        let waitPatterns: WaitPattern[] = []
         while(remainingTiles.length) {
             let waitPattern = this.getWaitPatternFrom(remainingTiles[0], remainingTiles, isHonors)
             waitPatterns.push(waitPattern)
             remainingTiles = this.nextTiles(remainingTiles, ...waitPattern.tiles)
         }
 
-        return {pairs: availablePairs, waitPatterns: waitPatterns}
+        //it's impossible hand contains pair and tanki wait
+        if (waitPatterns.find(x => x.type === WaitPatternType.TANKI)) {
+            availablePair = undefined
+            waitPatterns = []
+            remainingTiles = unusedTiles.slice(0)
+            while(remainingTiles.length) {
+                let waitPattern = this.getWaitPatternFrom(remainingTiles[0], remainingTiles, isHonors)
+                waitPatterns.push(waitPattern)
+                remainingTiles = this.nextTiles(remainingTiles, ...waitPattern.tiles)
+            }
+        }
+
+        return {pair: availablePair, waitPatterns: waitPatterns}
     }
 
     private nextTiles(hand: number[], ...tiles: number[]): number[] {
