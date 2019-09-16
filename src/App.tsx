@@ -1,7 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import {TempaiService} from "./utils/tempaiService";
+import {TempaiService} from "./utils/TempaiService";
 
 const App: React.FC = () => {
 
