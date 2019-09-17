@@ -1,25 +1,24 @@
 import React from 'react';
 import './App.css';
-import {TempaiService} from "./utils/TempaiService";
+
+import {HandService} from "./utils/HandService";
+import {Discard} from "./components/Discard";
 
 const App: React.FC = () => {
 
-  const service =  new TempaiService()
-  let hand = ''
+    const service = new HandService()
+    service.generate()
 
-  var bStyle = {
-    margin: '10px 0',
-    width: '75px',
-    height: '20px',
-  };
+    let discardTiles = service.getHand()
 
-  return (
+   return (
     <div className="App">
-      <header className="App-header">
 
-        <input defaultValue={''} onChange={(e) => hand = e.target.value}/>
-        <button style={bStyle}  onClick={() => console.log(service.hasTempai(hand))} />
-      </header>
+      <div className={'page-header'}>
+        <div className={'page-header__title'}></div>
+      </div>
+
+        <Discard tiles={discardTiles}/>
     </div>
   );
 }
