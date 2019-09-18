@@ -6,33 +6,57 @@ import {StateService} from '../services/StateService'
 
 type HandState = {
     tiles: Tile[]
+    tsumo: Tile | undefined
+}
+
+type HandProps = {
+    selectable: boolean
 }
 
 //todo add subscribe to StateChanged
-export class HandVisual extends React.Component<any, HandState> {
+export class HandVisual extends React.Component<HandProps, HandState> {
     stateService: StateService = StateService.instance
 
-    constructor(props: any) {
+    constructor(props: HandProps) {
         super(props)
 
         this.state = {
-            tiles: this.stateService.hand
+            tiles: this.stateService.hand,
+            tsumo: this.stateService.tsumo
         }
     }
 
+    componentDidMount(): void {
+        this.stateService.onHandChanged.add(this.updateState, this)
+    }
+
+    componentWillUnmount(): void {
+        this.stateService.onHandChanged.remove(this.updateState, this)
+    }
+
+    updateState() {
+        this.setState({
+            tiles: this.stateService.hand,
+            tsumo: this.stateService.tsumo
+        })
+    }
+
     getHand() {
-        return this.state.tiles.map(this.getTile)
+        return this.state.tiles.map(this.getTile.bind(this))
     }
 
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isDiscard={false} />
+            <TileVisual tile={tile} isDiscard={false} selectable={this.props.selectable}/>
         )
     }
 
     render() {
      return (
-         <div className={'hand'}>
+         <div className={'hand' + (this.props.selectable ? ' hand--selectable' : '')}>
+             <div className={'hand__tsumo'}>
+                {this.state.tsumo && this.getTile(this.state.tsumo)}
+             </div>
              {this.getHand()}
          </div>
      )

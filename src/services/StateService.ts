@@ -11,6 +11,7 @@ export class StateService {
     private handService = new HandService()
 
     onChange: signals.Signal<() => {}> = new signals.Signal()
+    onHandChanged: signals.Signal<() => {}> = new signals.Signal()
 
     private static _instance: StateService
     static get instance(): StateService {
@@ -24,26 +25,17 @@ export class StateService {
         this.handService.generate()
 
         this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
-        this.handService.nextTile()
-        this.handService.dropFromHand(1)
     }
 
     nextScreen(screen: ScreenType) {
-        this._currentScreen = ScreenType.SUCCESS
+        this._currentScreen = ScreenType.GETTING_TEMPAI
         this.onChange.dispatch()
+    }
+
+    dropTile(tile: Tile) {
+        this.handService.dropTile(tile)
+        this.handService.nextTile()
+        this.onHandChanged.dispatch()
     }
 
     get currentScreen(): ScreenType {
@@ -52,6 +44,10 @@ export class StateService {
 
     get hand(): Tile[] {
         return this.handService.getHand()
+    }
+
+    get tsumo(): Tile | undefined {
+        return this.handService.getTsumo()
     }
 
     get discard(): Tile[] {

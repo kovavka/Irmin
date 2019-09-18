@@ -20,7 +20,7 @@ export class MemorizingScreen extends React.Component {
     render() {
         return (
             <div>
-                <HandVisual/>
+                <HandVisual selectable={false}/>
             </div>
         )
     }

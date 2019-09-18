@@ -20,7 +20,7 @@ export class FailScreen extends React.Component {
     render() {
         return (
             <div>
-                <HandVisual/>
+                <HandVisual selectable={false}/>
                 <DiscardVisual/>
             </div>
         )

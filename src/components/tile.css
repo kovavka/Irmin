@@ -24,6 +24,7 @@
 
 .tile__box--discard {
     width: 76px;
+    border-radius: 10px;
 }
 
 .tile__box--hand {

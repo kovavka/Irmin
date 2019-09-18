@@ -20,6 +20,20 @@ export class DiscardVisual extends React.Component<any, DiscardState> {
         }
     }
 
+    componentDidMount(): void {
+        this.stateService.onHandChanged.add(this.updateState, this)
+    }
+
+    componentWillUnmount(): void {
+        this.stateService.onHandChanged.remove(this.updateState, this)
+    }
+
+    updateState() {
+        this.setState({
+            tiles: this.stateService.discard
+        })
+    }
+
     getDiscard() {
         let lines = [
                 this.state.tiles.slice(0,6),
@@ -38,7 +52,7 @@ export class DiscardVisual extends React.Component<any, DiscardState> {
 
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isDiscard={true} />
+            <TileVisual tile={tile} isDiscard={true} selectable={false} />
         )
     }
 

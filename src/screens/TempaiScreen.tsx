@@ -20,7 +20,7 @@ export class TempaiScreen extends React.Component {
     render() {
         return (
             <div>
-                <HandVisual/>
+                <HandVisual selectable={true}/>
                 <DiscardVisual/>
             </div>
         )

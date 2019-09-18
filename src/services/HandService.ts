@@ -21,6 +21,10 @@ export class HandService {
         return this.hand.slice(0)
     }
 
+    getTsumo(): Tile | undefined {
+        return this.tsumo
+    }
+
     getDiscard(): Tile[] {
         return this.discard.slice(0)
     }
@@ -82,10 +86,32 @@ export class HandService {
         return this.getHand()
     }
 
+    dropTile(tile: Tile): Tile[] {
+        if (this.tsumo) {
+            if (this.tsumo.suit === tile.suit && this.tsumo.value === tile.value) {
+                this.tsumo = undefined
+                this.discard.push(tile)
+            } else {
+                let index = this.hand.findIndex(x => x.suit == tile.suit && x.value == tile.value)
+                if (index !== -1) {
+                    this.discard.push(tile)
+
+                    this.hand.splice(index, 1)
+                    this.hand.push(this.tsumo)
+                    this.hand = this.hand.sort(this.sortHandler)
+
+                    this.tsumo = undefined
+                }
+            }
+        }
+
+        return this.getHand()
+    }
+
     private sortHandler(a: Tile, b: Tile) {
         if (a.suit === b.suit)
-            return a.suit - b.suit
+            return a.value - b.value
 
-        return a.value - b.value
+        return a.suit - b.suit
     }
 }

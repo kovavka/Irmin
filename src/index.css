@@ -70,3 +70,13 @@ code {
   cursor: pointer;
   width: 100%;
 }
+
+
+.hand__tsumo {
+  margin-right: 16px;
+}
+
+.hand--selectable .tile:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
