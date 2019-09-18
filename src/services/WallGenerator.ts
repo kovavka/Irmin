@@ -1,4 +1,4 @@
-import {SuitType, Tile} from "../models/Tile";
+import {SuitType, Tile} from "../types/Tile";
 
 export class WallGenerator {
     static generate() {

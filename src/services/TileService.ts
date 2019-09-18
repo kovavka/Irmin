@@ -35,7 +35,7 @@ import jihaiTon from '../img/jihaiTon.svg';
 import jihaiNan from '../img/jihaiNan.svg';
 import jihaiShaa from '../img/jihaiShaa.svg';
 import jihaiPei from '../img/jihaiPei.svg';
-import {SuitType, Tile} from "../models/Tile";
+import {SuitType, Tile} from "../types/Tile";
 
 export class TileService {
     static getSvg(tile: Tile) {

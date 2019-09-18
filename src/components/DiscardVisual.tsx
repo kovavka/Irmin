@@ -1,24 +1,30 @@
 import * as React from "react";
-import {TileDrawing} from "./TileDrawing";
-import {Tile} from "../models/Tile";
+import {TileVisual} from "./TileVisual";
+import {Tile} from "../types/Tile";
 import discard from '../img/tile-discard.svg';
+import {StateService} from '../services/StateService'
 
 type DiscardState = {
     tiles: Tile[]
 }
 
 //todo add subscribe to StateChanged
-export class Discard extends React.Component<DiscardState> {
+export class DiscardVisual extends React.Component<any, DiscardState> {
+    stateService: StateService = StateService.instance
 
-    constructor(props: DiscardState) {
+    constructor(props: any) {
         super(props)
+
+        this.state = {
+            tiles: this.stateService.discard
+        }
     }
 
     getDiscard() {
         let lines = [
-                this.props.tiles.slice(0,6),
-                this.props.tiles.slice(6,12),
-                this.props.tiles.slice(12,18),
+                this.state.tiles.slice(0,6),
+                this.state.tiles.slice(6,12),
+                this.state.tiles.slice(12,18),
             ]
         return lines.map(line => {
             return (
@@ -32,12 +38,7 @@ export class Discard extends React.Component<DiscardState> {
 
     getTile(tile: Tile) {
         return (
-            <div className={'tile'}>
-                <div className={'tile__inner'}>
-                    <img className={'tile__box'} src={discard}/>
-                    <TileDrawing tile={tile} isDiscard={true} />
-                </div>
-            </div>
+            <TileVisual tile={tile} isDiscard={true} />
         )
     }
 

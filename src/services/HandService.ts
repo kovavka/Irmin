@@ -1,11 +1,11 @@
-import {SuitType, Tile} from "../models/Tile";
+import {SuitType, Tile} from "../types/Tile";
 import {WallGenerator} from "./WallGenerator";
 
 export class HandService {
-    wall: Tile[] = []
-    hand: Tile[] = []
-    discard: Tile[] = []
-    tsumo: Tile | undefined
+    private wall: Tile[] = []
+    private hand: Tile[] = []
+    private discard: Tile[] = []
+    private tsumo: Tile | undefined
 
     generate(): Tile[]  {
         let wall = WallGenerator.generate()
@@ -19,6 +19,10 @@ export class HandService {
 
     getHand(): Tile[] {
         return this.hand.slice(0)
+    }
+
+    getDiscard(): Tile[] {
+        return this.discard.slice(0)
     }
 
     getStr(): string {
@@ -79,7 +83,7 @@ export class HandService {
     }
 
     private sortHandler(a: Tile, b: Tile) {
-        if (a.suit == b.suit)
+        if (a.suit === b.suit)
             return a.suit - b.suit
 
         return a.value - b.value
