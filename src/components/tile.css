@@ -23,7 +23,7 @@
 }
 
 .tile__box--discard {
-    width: 90px;
+    width: 76px;
 }
 
 .tile__box--hand {
@@ -37,7 +37,7 @@
 
 .tile__drawing--discard {
     top: 3px;
-    left: 19px;
+    left: 12px;
     transform: matrix3d(1,0,0.00,0,0.00,0.71,0.71,-0.0001,0,-0.71,0.71,0,0,0,0,1);
 }
 
