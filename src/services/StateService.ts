@@ -1,6 +1,7 @@
 import {ScreenType} from "../types/ScreenType";
 import {HandService} from './HandService'
 import {Tile} from '../types/Tile'
+import signals from 'signals';
 
 export class StateService {
     private _currentScreen = ScreenType.RULES
@@ -8,6 +9,8 @@ export class StateService {
     private timerTick = 0
     private timer = undefined
     private handService = new HandService()
+
+    onChange: signals.Signal<() => {}> = new signals.Signal()
 
     private static _instance: StateService
     static get instance(): StateService {
@@ -39,7 +42,8 @@ export class StateService {
     }
 
     nextScreen(screen: ScreenType) {
-        this._currentScreen = screen
+        this._currentScreen = ScreenType.SUCCESS
+        this.onChange.dispatch()
     }
 
     get currentScreen(): ScreenType {
