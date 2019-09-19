@@ -3,7 +3,7 @@ import {StateService} from '../services/StateService'
 import {ScreenType} from '../types/ScreenType'
 import {RulesScreen} from './RulesScreen'
 import {MemorizingScreen} from './MemorizingScreen'
-import {TempaiScreen} from './TempaiScreen'
+import {ProcessingScreen} from './ProcessingScreen'
 import {SuccessScreen} from './SuccessScreen'
 import {FailScreen} from './FailScreen'
 
@@ -46,10 +46,8 @@ export class Main extends React.Component<any, MainState> {
                 {currentScreen === ScreenType.MEMORIZING && (
                     <MemorizingScreen/>
                 )}
-                {(currentScreen === ScreenType.CHOOSE_TEMPAI ||
-                    currentScreen === ScreenType.GETTING_TEMPAI) &&
-                (
-                    <TempaiScreen/>
+                {currentScreen === ScreenType.PROCESSING && (
+                    <ProcessingScreen/>
                 )}
                 {currentScreen === ScreenType.SUCCESS && (
                     <SuccessScreen/>

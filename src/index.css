@@ -11,6 +11,11 @@ body {
   font-size: 24px;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -34,6 +39,7 @@ code {
 
 .page-header {
   text-align: center;
+  margin: 32px 0;
 }
 
 .page-header__title {
@@ -41,8 +47,10 @@ code {
 }
 
 .button-container {
-  float: right;
-
+  display: flex;
+  align-content: end;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .flat-btn  {
@@ -56,19 +64,53 @@ code {
   align-items: center;
 }
 
+.flat-btn:not(:first-child) {
+  margin-left: 10px;
+}
+
+.flat-btn--pressed {
+  webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+  -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+  box-shadow: inset 0px 0px 5px #c1c1c1;
+  outline: none;
+}
+
+
+.flat-btn--pressed.flat-btn--green {
+  background-color: #9ed2a2;
+}
 .flat-btn--green {
   background-color: #ADF6B1;
 }
-
-.flat-btn--green:hover {
-  background-color: #93d697;
+.flat-btn--green:active {
+  background-color: #80bb84;
 }
+.flat-btn--green:hover {
+  /*background-color: #93d697;*/
+}
+
+
+.flat-btn--pressed.flat-btn--blue {
+  background-color: #11b1b7;
+}
+.flat-btn--blue {
+  background-color: #12CDD4;
+}
+.flat-btn--blue:active {
+  background-color: #0e999e;
+}
+.flat-btn--blue:hover {
+  /*background-color: #93d697;*/
+}
+
 
 .flat-btn__caption {
   color: black;
   text-align: center;
   cursor: pointer;
   width: 100%;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 

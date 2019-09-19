@@ -1,8 +1,9 @@
 import * as React from "react";
 import {Tile} from "../types/Tile";
 import {TileService} from "../services/TileService";
-import discard from '../img/tile-discard.svg'
-import hand from '../img/tile-hand.svg'
+import discardTile from '../img/tile-discard.svg'
+import handTile from '../img/tile-hand.svg'
+import hiddenTile from '../img/tile-hidden.svg'
 import './tile.css';
 import {StateService} from '../services/StateService'
 
@@ -10,6 +11,7 @@ type TileDrawingProps = {
     tile: Tile,
     isDiscard: boolean,
     selectable: boolean,
+    hidden: boolean,
 }
 
 export class TileVisual extends React.Component<TileDrawingProps> {
@@ -30,14 +32,19 @@ export class TileVisual extends React.Component<TileDrawingProps> {
          <div className={'tile'} onClick={() => this.onTileSelected()}>
              <div className={'tile__inner' + (this.props.isDiscard ? ' tile__inner--discard' : '')}>
                  {this.props.isDiscard && (
-                     <img className={'tile__box tile__box--discard'} src={discard}/>
+                     <img className={'tile__box tile__box--discard'} src={discardTile}/>
                  )}
-                 {!this.props.isDiscard && (
-                     <img className={'tile__box tile__box--hand'} src={hand}/>
+                 {!this.props.isDiscard && this.props.hidden  && (
+                     <img className={'tile__box tile__box--discard'} src={hiddenTile}/>
+                 )}
+                 {!this.props.isDiscard && !this.props.hidden  && (
+                     <img className={'tile__box tile__box--discard'} src={handTile}/>
+                 )}
+                 {!this.props.hidden  && (
+                     <img className={'tile__drawing' + (this.props.isDiscard ? ' tile__drawing--discard' : ' tile__drawing--hand')}
+                          src={TileService.getSvg(this.props.tile)}/>
                  )}
 
-                 <img className={'tile__drawing' + (this.props.isDiscard ? ' tile__drawing--discard' : ' tile__drawing--hand')}
-                      src={TileService.getSvg(this.props.tile)}/>
              </div>
          </div>
      )

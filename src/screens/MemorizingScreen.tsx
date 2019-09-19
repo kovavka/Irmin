@@ -20,7 +20,14 @@ export class MemorizingScreen extends React.Component {
     render() {
         return (
             <div>
-                <HandVisual selectable={false}/>
+                <div className={'page-header'}>
+                    <div className={'page-header__title'}>
+                        Remember the hand
+                    </div>
+                </div>
+                <div className={'page-content'}>
+                    <HandVisual selectable={false} reverse={false} hiddenTiles={false} />
+                </div>
             </div>
         )
     }

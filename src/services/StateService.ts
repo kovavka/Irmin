@@ -5,13 +5,15 @@ import signals from 'signals';
 
 export class StateService {
     private _currentScreen = ScreenType.RULES
-    private showRules = false
+    private showRules: boolean = false
     private timerTick = 0
     private timer = undefined
+    // private _debug: boolean = false
     private handService = new HandService()
 
-    onChange: signals.Signal<() => {}> = new signals.Signal()
-    onHandChanged: signals.Signal<() => {}> = new signals.Signal()
+    onChange: signals.Signal = new signals.Signal()
+    onHandChanged: signals.Signal = new signals.Signal()
+    // onDebugChanged: signals.Signal<boolean> = new signals.Signal()
 
     private static _instance: StateService
     static get instance(): StateService {
@@ -28,7 +30,7 @@ export class StateService {
     }
 
     nextScreen(screen: ScreenType) {
-        this._currentScreen = ScreenType.GETTING_TEMPAI
+        this._currentScreen = ScreenType.PROCESSING
         this.onChange.dispatch()
     }
 
@@ -37,6 +39,15 @@ export class StateService {
         this.handService.nextTile()
         this.onHandChanged.dispatch()
     }
+
+    // get debug(): boolean {
+    //     return this._debug
+    // }
+
+    // debug(value: boolean) {
+    //     this._debug = value
+    //     this.onDebugChanged.dispatch()
+    // }
 
     get currentScreen(): ScreenType {
         return this._currentScreen
