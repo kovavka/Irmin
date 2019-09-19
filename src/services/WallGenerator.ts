@@ -4,7 +4,7 @@ export class WallGenerator {
     static generate() {
         let tiles = this.initTiles()
 
-        return this.shuffle(tiles).slice(0,30)
+        return this.randomShuffle(tiles).slice(0,30)
     }
 
     private static initTiles(): Tile[] {
@@ -36,6 +36,16 @@ export class WallGenerator {
 
     private static shuffle(tiles: Tile[]): Tile[] {
         return tiles.sort(function() {return 0.5 - Math.random()});
+    }
+
+    private static randomShuffle(tiles: Tile[]): Tile[] {
+        let rand = 1 + Math.random() * 10
+        let shuffled = tiles
+        for(let i = 0; i < rand; i++) {
+            shuffled = this.shuffle(shuffled)
+        }
+
+        return shuffled;
     }
 }
 

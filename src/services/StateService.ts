@@ -55,13 +55,23 @@ export class StateService {
 
     private setScreen(screen: ScreenType) {
         this._currentScreen = screen
+        if (screen === ScreenType.MEMORIZING) {
+            this.clear()
+        }
+
         this.onChange.dispatch()
+    }
+
+    private clear() {
+        this.showRules = false
+        this._chooseTempai = false
     }
 
     selectTile(tile: Tile) {
         if (!this._chooseTempai) {
             this.dropTile(tile)
         } else {
+            this.handService.dropTile(tile)
             this.checkTempai()
         }
     }
