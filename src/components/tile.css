@@ -13,8 +13,10 @@
 }
 
 .tile__inner--discard {
-    width: 76px;
-    height: 77px;
+    width: 5vw;
+    max-width: 76px;
+    height: calc(5vw + 1px);
+    max-height: 76px;
 }
 
 .tile__box {
@@ -52,6 +54,17 @@
     .tile__drawing--hand {
         top: 34px;
         left: 12px;
+    }
+    .tile__drawing--discard {
+        top: 3px;
+        left: 12px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .tile__drawing--discard {
+        top: 0.12vw;
+        left: 0.66vw;
     }
 }
 
