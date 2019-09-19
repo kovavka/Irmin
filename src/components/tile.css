@@ -23,8 +23,8 @@
 }
 
 .tile__box--discard {
-    width: 76px;
-    border-radius: 10px;
+    width: 5vw;
+    max-width: 76px;
 }
 
 .tile__box--hand {
@@ -33,7 +33,8 @@
 
 .tile__drawing {
     position: absolute;
-    width: 50px;
+    max-width: 50px;
+    width: 3.7vw;
 }
 
 .tile__drawing--discard {
@@ -43,6 +44,20 @@
 }
 
 .tile__drawing--hand {
-    top: 34px;
-    left: 12px;
+    top: 2.12vw;
+    left: 0.66vw;
+}
+
+@media (min-width: 1600px) {
+    .tile__drawing--hand {
+        top: 34px;
+        left: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .tile__drawing--hand {
+        top: 1.6vw;
+        left: 0.54vw;
+    }
 }

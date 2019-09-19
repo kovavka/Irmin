@@ -8,6 +8,7 @@ import {StateService} from '../services/StateService'
 
 type ProcessingScreenState = {
     debug: boolean
+    choose: boolean
 }
 
 export class ProcessingScreen extends React.Component<any, ProcessingScreenState> {
@@ -17,7 +18,8 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         super(props)
 
         this.state = {
-            debug: false
+            debug: false,
+            choose: false,
         }
     }
 
@@ -29,11 +31,11 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         // this.stateService.onDebugChanged.remove(this.updateState, this)
     }
 
-    updateState(value: boolean) {
-        this.setState({
-            debug: value
-        })
-    }
+    // updateState(value: boolean) {
+    //     this.setState({
+    //         debug: value,
+    //     })
+    // }
 
     onDebugClick() {
         this.setState({
@@ -42,7 +44,9 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     onTempaiClick() {
-
+        this.setState({
+            choose: !this.state.choose
+        })
     }
 
     render() {
@@ -58,7 +62,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                         <div className={'flat-btn flat-btn--green' + (this.state.debug ? ' flat-btn--pressed' : '')} >
                             <div className={'flat-btn__caption'} onClick={() => this.onDebugClick()}>Debug</div>
                         </div>
-                        <div className={'flat-btn flat-btn--blue' + (this.state.debug ? ' flat-btn--pressed' : '')} >
+                        <div className={'flat-btn flat-btn--blue' + (this.state.choose ? ' flat-btn--pressed' : '')} >
                             <div className={'flat-btn__caption'} onClick={() => this.onTempaiClick()}>Tempai!</div>
                         </div>
                     </div>

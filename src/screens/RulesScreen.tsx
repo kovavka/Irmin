@@ -1,12 +1,11 @@
 import * as React from 'react'
 import {StateService} from '../services/StateService'
-import {ScreenType} from '../types/ScreenType'
 
 export class RulesScreen extends React.Component {
     stateService: StateService = StateService.instance
 
     onOkClick() {
-        this.stateService.nextScreen(ScreenType.RULES)
+        this.stateService.nextScreen()
     }
 
     render() {

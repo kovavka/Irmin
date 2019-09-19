@@ -25,13 +25,31 @@ export class StateService {
 
     private constructor() {
         this.handService.generate()
-
-        this.handService.nextTile()
     }
 
-    nextScreen(screen: ScreenType) {
-        this._currentScreen = ScreenType.PROCESSING
+    nextScreen() {
+        switch (this._currentScreen) {
+            case ScreenType.RULES:
+                this._currentScreen = ScreenType.MEMORIZING
+                break
+            case ScreenType.MEMORIZING:
+                this._currentScreen = ScreenType.PROCESSING
+                this.handService.nextTile()
+                break
+            case ScreenType.PROCESSING:
+                this._currentScreen = ScreenType.FAIL
+                // this._currentScreen = ScreenType.SUCCESS
+                break
+            case ScreenType.FAIL:
+                this._currentScreen = ScreenType.MEMORIZING
+                break
+            case ScreenType.SUCCESS:
+                this._currentScreen = ScreenType.MEMORIZING
+                break
+        }
+
         this.onChange.dispatch()
+        // this.onHandChanged.dispatch()
     }
 
     dropTile(tile: Tile) {

@@ -49,19 +49,19 @@ code {
 .button-container {
   display: flex;
   align-content: end;
-  margin-left: auto;
   justify-content: flex-end;
+  margin: 36px 0;
 }
 
 .flat-btn  {
   width: 150px;
   height: 40px;
-  padding: 0 8px;
   line-height: 30px;
   position: relative;
   border-radius: 8px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .flat-btn:not(:first-child) {
@@ -107,15 +107,18 @@ code {
 .flat-btn__caption {
   color: black;
   text-align: center;
-  cursor: pointer;
   width: 100%;
   -webkit-user-drag: none;
   user-select: none;
 }
 
 
+.discard {
+  margin-top: 64px;
+}
+
 .hand__tsumo {
-  margin-right: 16px;
+  margin-right: 2vw;
 }
 
 .hand--selectable .tile:hover {
