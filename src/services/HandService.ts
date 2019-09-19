@@ -29,6 +29,10 @@ export class HandService {
         return this.discard.slice(0)
     }
 
+    get hasTiles(): boolean {
+        return !!this.wall.length
+    }
+
     getStr(): string {
         let hand = ''
 

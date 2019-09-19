@@ -44,9 +44,15 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     onTempaiClick() {
+        this.stateService.chooseTempai(!this.state.choose)
+
         this.setState({
             choose: !this.state.choose
         })
+    }
+
+    onGiveUpClick() {
+        this.stateService.nextScreen()
     }
 
     render() {
@@ -54,7 +60,12 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
             <div>
                 <div className={'page-header'}>
                     <div className={'page-header__title'}>
-                        Drop a tile
+                        {!this.state.choose && (
+                            'Drop a tile'
+                        )}
+                        {this.state.choose && (
+                            'Select tempai'
+                        )}
                     </div>
                 </div>
                 <div className={'page-content'}>
@@ -69,6 +80,12 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
 
                     <HandVisual selectable={true} reverse={true} hiddenTiles={!this.state.debug}/>
                     <DiscardVisual/>
+
+                    <div className={'button-container'}>
+                        <div className={'flat-btn flat-btn--blue'} >
+                            <div className={'flat-btn__caption'} onClick={() => this.onGiveUpClick()}>Give up</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

@@ -23,7 +23,7 @@ export class TileVisual extends React.Component<TileDrawingProps> {
 
     onTileSelected() {
         if (this.props.selectable && !this.props.isDiscard) {
-            this.stateService.dropTile(this.props.tile)
+            this.stateService.selectTile(this.props.tile)
         }
     }
 

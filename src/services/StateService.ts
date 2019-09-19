@@ -2,14 +2,17 @@ import {ScreenType} from "../types/ScreenType";
 import {HandService} from './HandService'
 import {Tile} from '../types/Tile'
 import signals from 'signals';
+import {TempaiService} from './TempaiService'
 
 export class StateService {
     private _currentScreen = ScreenType.RULES
     private showRules: boolean = false
+    private _chooseTempai: boolean = false
     private timerTick = 0
     private timer = undefined
     // private _debug: boolean = false
     private handService = new HandService()
+    private tempaiService = new TempaiService()
 
     onChange: signals.Signal = new signals.Signal()
     onHandChanged: signals.Signal = new signals.Signal()
@@ -30,32 +33,61 @@ export class StateService {
     nextScreen() {
         switch (this._currentScreen) {
             case ScreenType.RULES:
-                this._currentScreen = ScreenType.MEMORIZING
+                this.setScreen(ScreenType.MEMORIZING)
                 break
             case ScreenType.MEMORIZING:
-                this._currentScreen = ScreenType.PROCESSING
+                this.setScreen(ScreenType.PROCESSING)
                 this.handService.nextTile()
                 break
             case ScreenType.PROCESSING:
-                this._currentScreen = ScreenType.FAIL
-                // this._currentScreen = ScreenType.SUCCESS
+                this.setScreen(ScreenType.FAIL)
                 break
             case ScreenType.FAIL:
-                this._currentScreen = ScreenType.MEMORIZING
+                this.handService.generate()
+                this.setScreen(ScreenType.MEMORIZING)
                 break
             case ScreenType.SUCCESS:
-                this._currentScreen = ScreenType.MEMORIZING
+                this.handService.generate()
+                this.setScreen(ScreenType.MEMORIZING)
                 break
         }
+    }
 
+    private setScreen(screen: ScreenType) {
+        this._currentScreen = screen
         this.onChange.dispatch()
-        // this.onHandChanged.dispatch()
+    }
+
+    selectTile(tile: Tile) {
+        if (!this._chooseTempai) {
+            this.dropTile(tile)
+        } else {
+            this.checkTempai()
+        }
+    }
+
+    checkTempai() {
+        let str = this.handService.getStr()
+        if (this.tempaiService.hasTempai(str)) {
+            this.setScreen(ScreenType.SUCCESS)
+        } else {
+            this.setScreen(ScreenType.FAIL)
+        }
     }
 
     dropTile(tile: Tile) {
         this.handService.dropTile(tile)
-        this.handService.nextTile()
-        this.onHandChanged.dispatch()
+
+        if (this.handService.hasTiles) {
+            this.handService.nextTile()
+            this.onHandChanged.dispatch()
+        } else {
+            this.setScreen(ScreenType.FAIL)
+        }
+    }
+
+    chooseTempai(value: boolean) {
+        this._chooseTempai = value
     }
 
     // get debug(): boolean {
