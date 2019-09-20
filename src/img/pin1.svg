@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="400">
   <g transform="matrix(.89332 0 0 .89332 -207.387 -311.331)">
     <circle r="160" cy="572.362" cx="400" fill="#fff" stroke="#000" stroke-width="10.033" stroke-linejoin="round"/>
-    <circle r="145" cy="572.362" cx="400" fill="#000037" stroke="#000037" stroke-width="10.033" stroke-linejoin="round"/>
+    <circle r="145" cy="572.362" cx="400" stroke="#000" stroke-width="10.033" stroke-linejoin="round"/>
     <g transform="translate(.354)">
       <path d="M392.327 496.48c-8.272-82.935 24.083-82.938 15.288 0" id="a" fill="none" fill-rule="evenodd" stroke="#fff" stroke-width="8.955" stroke-linecap="round"/>
       <g transform="translate(-31 -64.5)">
@@ -24,7 +24,7 @@
         <use height="100%" width="100%" transform="rotate(-20 600.536 516.23)" xlink:href="#a"/>
       </g>
     </g>
-    <circle r="84.474" cy="572.362" cx="400" fill="#fff" stroke="#000037" stroke-width="10.24" stroke-linejoin="round"/>
+    <circle r="84.474" cy="572.362" cx="400" fill="#fff" stroke="#000" stroke-width="10.24" stroke-linejoin="round"/>
     <circle r="72.315" cy="572.362" cx="400" fill="#b93c3c"/>
     <g transform="translate(-.177 .088)" id="c">
       <path d="M401.332 554.245c-3.146-9.94-29.568-32.568-1.223-34.015 29.37 1.6.872 23.529-1.718 34.178" fill="none" fill-rule="evenodd" stroke="#fff" stroke-width="23.11"/>
