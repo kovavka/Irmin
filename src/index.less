@@ -1,3 +1,5 @@
+@text-color: #E6E6E6;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   background-color: #282c34;
-  color: #E6E6E6;
+  color: @text-color;
   font-size: 24px;
 }
 
@@ -16,9 +18,13 @@ img {
   user-select: none;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+a {
+  color: #b6ddff;
+}
+
+ul {
+  color: #b6ddff;
+  margin: 0;
 }
 
 .hand {
@@ -63,14 +69,39 @@ code {
   }
 }
 
+.page-footer {
+  position: fixed;
+  bottom: 0;
+  width: 80vw;
+  font-size: 16px;
+
+  .page-footer__link {
+    cursor: pointer;
+  }
+
+  .page-footer__separator {
+    width: 2px;
+    height: 1em;
+    background-color: @text-color;
+    margin: 0px 4px;
+  }
+}
+
 .flex-container {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin: 36px 0;
 
+  &.flex-container--margin-s {
+    margin: 8px 0;
+  }
+
   &.flex-container--between {
     justify-content: space-between;
+  }
+  &.flex-container--center {
+    justify-content: center;
   }
 
   .flat-btn:not(:first-child) {

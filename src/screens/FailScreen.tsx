@@ -2,6 +2,7 @@ import * as React from "react";
 import {HandVisual} from '../components/HandVisual'
 import {DiscardVisual} from '../components/DiscardVisual'
 import {StateService} from '../services/StateService'
+import {Footer} from '../components/Footer'
 
 export class FailScreen extends React.Component {
     stateService: StateService = StateService.instance
@@ -28,6 +29,7 @@ export class FailScreen extends React.Component {
                     <HandVisual selectable={false} reverse={false} hiddenTiles={false}/>
                     <DiscardVisual/>
                 </div>
+                <Footer/>
             </div>
         )
     }

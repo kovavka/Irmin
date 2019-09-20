@@ -1,10 +1,7 @@
 import * as React from "react";
-import {TileVisual} from "../components/TileVisual";
-import {Tile} from "../types/Tile";
-import discard from '../img/tile-discard.svg';
 import {HandVisual} from '../components/HandVisual'
-import {DiscardVisual} from '../components/DiscardVisual'
 import {StateService} from '../services/StateService'
+import {Footer} from '../components/Footer'
 
 type MemorizingScreenState = {
     remainingTime: string
@@ -61,6 +58,7 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
 
                     <HandVisual selectable={false} reverse={false} hiddenTiles={false} />
                 </div>
+                <Footer/>
             </div>
         )
     }

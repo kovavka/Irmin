@@ -5,6 +5,7 @@ import discard from '../img/tile-discard.svg';
 import {HandVisual} from '../components/HandVisual'
 import {DiscardVisual} from '../components/DiscardVisual'
 import {StateService} from '../services/StateService'
+import {Footer} from '../components/Footer'
 
 type ProcessingScreenState = {
     debug: boolean
@@ -105,6 +106,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                         </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
         )
     }

@@ -8,7 +8,9 @@ export class StateService {
     private handService = new HandService()
     private tempaiService = new TempaiService()
 
-    private _currentScreen = ScreenType.RULES
+    private initialized = false
+    private _currentScreen: ScreenType = ScreenType.RULES
+    private previousScreen: ScreenType | undefined = undefined
     private showRules: boolean = false
     private _chooseTempai: boolean = false
     private _remainingTime: number = 0
@@ -39,7 +41,18 @@ export class StateService {
     nextScreen() {
         switch (this._currentScreen) {
             case ScreenType.RULES:
-                this.setScreen(ScreenType.MEMORIZING)
+                if(!this.initialized) {
+                    this.initialized = true
+                    this.setScreen(ScreenType.MEMORIZING)
+                } else {
+                    if (this.previousScreen) {
+                        this.setScreen(this.previousScreen)
+                        this.previousScreen = undefined
+                    } else {
+                        this.handService.generate()
+                        this.setScreen(ScreenType.MEMORIZING)
+                    }
+                }
                 break
             case ScreenType.MEMORIZING:
                 this.setScreen(ScreenType.PROCESSING)
@@ -53,6 +66,19 @@ export class StateService {
                 this.setScreen(ScreenType.MEMORIZING)
                 break
             case ScreenType.SUCCESS:
+                this.handService.generate()
+                this.setScreen(ScreenType.MEMORIZING)
+                break
+            case ScreenType.ABOUT:
+                if (this.previousScreen) {
+                    this.setScreen(this.previousScreen)
+                    this.previousScreen = undefined
+                } else {
+                    this.handService.generate()
+                    this.setScreen(ScreenType.MEMORIZING)
+                }
+                break
+            case ScreenType.SETTINGS:
                 this.handService.generate()
                 this.setScreen(ScreenType.MEMORIZING)
                 break
@@ -147,6 +173,25 @@ export class StateService {
         this._chooseTempai = value
         this.onChooseTempaiChanged.dispatch(value)
     }
+
+
+    openRules() {
+        this.clearTimer()
+        this.previousScreen = this.currentScreen
+        this.setScreen(ScreenType.RULES)
+    }
+
+    openSettings() {
+        this.clear()
+        this.setScreen(ScreenType.SETTINGS)
+    }
+
+    openAbout() {
+        this.clearTimer()
+        this.previousScreen = this.currentScreen
+        this.setScreen(ScreenType.ABOUT)
+    }
+
 
     // get debug(): boolean {
     //     return this._debug

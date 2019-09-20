@@ -4,4 +4,6 @@ export enum ScreenType {
     PROCESSING,
     SUCCESS,
     FAIL,
+    ABOUT   ,
+    SETTINGS,
 }

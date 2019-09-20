@@ -6,6 +6,8 @@ import {MemorizingScreen} from './MemorizingScreen'
 import {ProcessingScreen} from './ProcessingScreen'
 import {SuccessScreen} from './SuccessScreen'
 import {FailScreen} from './FailScreen'
+import {AboutScreen} from './AboutScreen'
+import {SettingsScreen} from './SettingsScreen'
 
 type MainState = {
     currentScreen: ScreenType
@@ -54,6 +56,12 @@ export class Main extends React.Component<any, MainState> {
                 )}
                 {currentScreen === ScreenType.FAIL && (
                     <FailScreen/>
+                )}
+                {currentScreen === ScreenType.ABOUT && (
+                    <AboutScreen/>
+                )}
+                {currentScreen === ScreenType.SETTINGS && (
+                    <SettingsScreen/>
                 )}
             </div>
         )
