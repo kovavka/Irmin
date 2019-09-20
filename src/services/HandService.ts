@@ -13,6 +13,7 @@ export class HandService {
         this.hand = wall.slice(0,13).sort(this.sortHandler)
         this.wall = wall.slice(13)
         this.discard = []
+        this.tsumo = undefined
 
         return this.getHand()
     }

@@ -16,7 +16,6 @@ type HandProps = {
     hiddenTiles: boolean
 }
 
-//todo add subscribe to StateChanged
 export class HandVisual extends React.Component<HandProps, HandState> {
     stateService: StateService = StateService.instance
 
