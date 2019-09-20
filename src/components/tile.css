@@ -42,7 +42,7 @@
 .tile__drawing--discard {
     top: 3px;
     left: 12px;
-    transform: matrix3d(1,0,0.00,0,0.00,0.71,0.71,-0.0001,0,-0.71,0.71,0,0,0,0,1);
+    transform: scaleY(0.8);
 }
 
 .tile__drawing--hand {
@@ -72,5 +72,5 @@
     .tile__drawing--hand {
         top: 1.6vw;
         left: 0.54vw;
-    }
+}
 }

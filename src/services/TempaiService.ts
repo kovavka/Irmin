@@ -86,7 +86,9 @@ export class TempaiService {
 
         let handPatterns: HandWaitStructure[] = []
         for (let manStructure of possibleManSuits) {
-            handPatterns.push(...this.processPossiblePinSuits(manStructure, possiblePinSuits, possibleSouSuits, possibleHonors))
+            handPatterns.push(
+                ...this.processPossiblePinSuits(manStructure, possiblePinSuits, possibleSouSuits, possibleHonors)
+            )
         }
         return handPatterns
     }
@@ -133,20 +135,21 @@ export class TempaiService {
     ) {
         if (!possibleHonors.length) {
             return [
-                <HandWaitStructure> {
-                man:  manStructure,
-                pin:  pinStructure,
-                sou:  souStructure,
-            }]
+                <HandWaitStructure>{
+                    man: manStructure,
+                    pin: pinStructure,
+                    sou: souStructure,
+                },
+            ]
         }
 
         let handPatterns: HandWaitStructure[] = []
         for (let honorStructure of possibleHonors) {
-            handPatterns.push(<HandWaitStructure> {
-                man:  manStructure,
-                pin:  pinStructure,
-                sou:  souStructure,
-                honors:  honorStructure,
+            handPatterns.push(<HandWaitStructure>{
+                man: manStructure,
+                pin: pinStructure,
+                sou: souStructure,
+                honors: honorStructure,
             })
         }
 
@@ -181,20 +184,25 @@ export class TempaiService {
             waits.push(...hand.honors.waitPatterns)
         }
 
-        if (pairsCount > 1 || waits.length > 2 || waits.length === 0) {
+        if (pairsCount > 2 || waits.length > 2) {
             return false
+        }
+
+        if (pairsCount === 2 && waits.length === 0) {
+            return true //SHANPON
         }
 
         if (
             pairsCount === 0 &&
-            (waits.length === 1 && waits[0].type === WaitPatternType.TANKI ||
-                waits.length === 2 && waits.every(pattern => pattern.type === WaitPatternType.SHANPON))
+            ((waits.length === 1 && waits[0].type === WaitPatternType.TANKI) ||
+                (waits.length === 2 && waits.every(pattern => pattern.type === WaitPatternType.SHANPON)))
         ) {
             return true
         }
 
         if (
             pairsCount === 1 &&
+            waits.length === 1 &&
             [WaitPatternType.KANCHAN, WaitPatternType.RYANMEN_PENCHAN].includes(waits[0].type)
         ) {
             return true
@@ -229,8 +237,6 @@ export class TempaiService {
         }
         return false
     }
-
-
 
     //OrSimpleTankiRyanpeikou
     private isChiitoi(suits: HandStructure) {
@@ -276,28 +282,32 @@ export class TempaiService {
         let remainingManSuit = manPairs.length ? manTiles.join('').replace(manPairs[0].toString(), '') : manTiles.join('')
         let remainingPinSuit = pinPairs.length ? pinTiles.join('').replace(pinPairs[0].toString(), '') : pinTiles.join('')
         let remainingSouSuit = souPairs.length ? souTiles.join('').replace(souPairs[0].toString(), '') : souTiles.join('')
-        let remainingHonors = honorPairs.length ? honorTiles.join('').replace(honorPairs[0].toString(), '') : honorTiles.join('')
+        let remainingHonors = honorPairs.length
+            ? honorTiles.join('').replace(honorPairs[0].toString(), '')
+            : honorTiles.join('')
 
         let remainingHand = `${remainingManSuit}m${remainingPinSuit}p${remainingSouSuit}s${remainingHonors}z`
 
-        let regex = new RegExp('^([19]m[19]{2}p[19]{2}s[1-7]{7}z|[19]{2}m[19]p[19]{2}s[1-7]{7}z|[19]{2}m[19]{2}p[19]s[1-7]{7}z|[19]{2}m[19]{2}p[19]{2}s[1-7]{6}z)$')
+        let regex = new RegExp(
+            '^([19]m[19]{2}p[19]{2}s[1-7]{7}z|[19]{2}m[19]p[19]{2}s[1-7]{7}z|[19]{2}m[19]{2}p[19]s[1-7]{7}z|[19]{2}m[19]{2}p[19]{2}s[1-7]{6}z)$'
+        )
         return regex.test(remainingHand)
     }
 
     //check isHonors for getWaitPatterns!
-
     private getSuits(hand: string): HandStructure {
         let regex = new RegExp('^(([1-9]*)m)?(([1-9]*)p)?(([1-9]*)s)?(([1-7]*)z)?$')
         let matches = hand.match(regex)
-        if (!matches)
+        if (!matches) {
             throw new Error('incorrect hand structure')
+        }
 
         let manTiles = matches[2] ? matches[2].split('').map(x => Number(x)) : undefined
         let pinTiles = matches[4] ? matches[4].split('').map(x => Number(x)) : undefined
         let souTiles = matches[6] ? matches[6].split('').map(x => Number(x)) : undefined
         let honorTiles = matches[8] ? matches[8].split('').map(x => Number(x)) : undefined
 
-        return <HandStructure> {
+        return <HandStructure>{
             manSuit: manTiles,
             pinSuit: pinTiles,
             souSuit: souTiles,
@@ -306,7 +316,7 @@ export class TempaiService {
     }
 
     private getSimpleSuitStructure(tiles: number[]): SuitStructure {
-        return <SuitStructure> {
+        return <SuitStructure>{
             sets: [],
             unusedTiles: [],
             waitPatterns: [],
@@ -330,23 +340,22 @@ export class TempaiService {
         // let childStructures: HandStructure[] = []
         for (let tile of structure.remainingTiles) {
             let sets = this.getSets(tile, remainingHand)
-            for(let set of sets) {
-                let newStructure = <SuitStructure> {
+            for (let set of sets) {
+                let newStructure = <SuitStructure>{
                     sets: structure.sets.length ? structure.sets.concat([set]) : [set],
                     remainingTiles: this.nextTiles(remainingHand, ...set),
-                    unusedTiles: unusedTiles.slice(0)
+                    unusedTiles: unusedTiles.slice(0),
                 }
                 this.run(allVariations, newStructure, isHonors)
-
             }
             unusedTiles.push(tile)
             remainingHand = this.nextTiles(remainingHand, tile)
         }
 
-        let parentStructure =  <SuitStructure> {
+        let parentStructure = <SuitStructure>{
             sets: structure.sets,
             remainingTiles: remainingHand,
-            unusedTiles: unusedTiles
+            unusedTiles: unusedTiles,
         }
         this.trySetStructure(allVariations, parentStructure, isHonors)
 
@@ -354,9 +363,12 @@ export class TempaiService {
     }
 
     private trySetStructure(allVariations: SuitStructure[], structure: SuitStructure, isHonors: boolean) {
-        let possibleStructures = allVariations.filter(x => x.sets.length === structure.sets.length &&
-            x.unusedTiles.join('') === structure.unusedTiles.join('') &&
-            x.sets.map(n => n.join('')).join(' ') === structure.sets.map(n => n.join('')).join(' '))
+        let possibleStructures = allVariations.filter(
+            x =>
+                x.sets.length === structure.sets.length &&
+                x.unusedTiles.join('') === structure.unusedTiles.join('') &&
+                x.sets.map(n => n.join('')).join(' ') === structure.sets.map(n => n.join('')).join(' ')
+        )
 
         if (!possibleStructures.length) {
             let data = this.getPairsAndWaitings(structure.unusedTiles, isHonors)
@@ -366,7 +378,10 @@ export class TempaiService {
         }
     }
 
-    private getPairsAndWaitings(unusedTiles: number[], isHonors: boolean): {pair: number | undefined, waitPatterns: WaitPattern[]} {
+    private getPairsAndWaitings(
+        unusedTiles: number[],
+        isHonors: boolean
+    ): {pair: number | undefined; waitPatterns: WaitPattern[]} {
         let allPairs = this.getPairs(unusedTiles)
 
         let availablePair: number | undefined
@@ -383,7 +398,7 @@ export class TempaiService {
         }
 
         let waitPatterns: WaitPattern[] = []
-        while(remainingTiles.length) {
+        while (remainingTiles.length) {
             let waitPattern = this.getWaitPatternFrom(remainingTiles[0], remainingTiles, isHonors)
             waitPatterns.push(waitPattern)
             remainingTiles = this.nextTiles(remainingTiles, ...waitPattern.tiles)
@@ -394,7 +409,7 @@ export class TempaiService {
             availablePair = undefined
             waitPatterns = []
             remainingTiles = unusedTiles.slice(0)
-            while(remainingTiles.length) {
+            while (remainingTiles.length) {
                 let waitPattern = this.getWaitPatternFrom(remainingTiles[0], remainingTiles, isHonors)
                 waitPatterns.push(waitPattern)
                 remainingTiles = this.nextTiles(remainingTiles, ...waitPattern.tiles)
@@ -412,8 +427,8 @@ export class TempaiService {
         return str.split('').map(x => Number(x))
     }
 
-    private getSets(tile: number, str: number[]) {
-        let sets = []
+    private getSets(tile: number, str: number[]): number[][] {
+        let sets: number[][] = []
         let chii = this.getChii(tile, str)
         if (chii) {
             sets.push(chii)
@@ -464,7 +479,7 @@ export class TempaiService {
         return undefined
     }
 
-    private getPon(tile: number, handPart: number[]): number[] | undefined  {
+    private getPon(tile: number, handPart: number[]): number[] | undefined {
         if (this.includesFrom(handPart, tile, tile, tile)) {
             return [tile, tile, tile]
         }
@@ -473,15 +488,15 @@ export class TempaiService {
 
     private getWaitPatternFrom(tile: number, handPart: number[], isHonors: boolean): WaitPattern {
         if (this.includesFrom(handPart, tile, tile)) {
-           return <WaitPattern> {
-               tiles: [tile, tile],
-               type: WaitPatternType.SHANPON,
-           }
+            return <WaitPattern>{
+                tiles: [tile, tile],
+                type: WaitPatternType.SHANPON,
+            }
         }
 
         if (tile === 9 || isHonors) {
             //not shanpon => only tanki
-            return <WaitPattern> {
+            return <WaitPattern>{
                 tiles: [tile],
                 type: WaitPatternType.TANKI,
             }
@@ -489,8 +504,7 @@ export class TempaiService {
 
         let next1 = tile + 1
         if (this.includesFrom(handPart, tile, next1)) {
-            //ryanmen or penchan
-            return <WaitPattern> {
+            return <WaitPattern>{
                 tiles: [tile, next1],
                 type: WaitPatternType.RYANMEN_PENCHAN,
             }
@@ -498,7 +512,7 @@ export class TempaiService {
 
         if (tile === 8) {
             //not shanpon, ryanmen or penchan => only tanki
-            return <WaitPattern> {
+            return <WaitPattern>{
                 tiles: [tile],
                 type: WaitPatternType.TANKI,
             }
@@ -506,15 +520,14 @@ export class TempaiService {
 
         let next2 = tile + 2
         if (this.includesFrom(handPart, tile, next2)) {
-            //kanchan
-            return <WaitPattern> {
+            return <WaitPattern>{
                 tiles: [tile, next2],
                 type: WaitPatternType.KANCHAN,
             }
         }
 
         //only tanki
-        return <WaitPattern> {
+        return <WaitPattern>{
             tiles: [tile],
             type: WaitPatternType.TANKI,
         }

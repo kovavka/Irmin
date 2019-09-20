@@ -44,7 +44,6 @@ export class TileVisual extends React.Component<TileDrawingProps> {
                      <img className={'tile__drawing' + (this.props.isDiscard ? ' tile__drawing--discard' : ' tile__drawing--hand')}
                           src={TileService.getSvg(this.props.tile)}/>
                  )}
-
              </div>
          </div>
      )
