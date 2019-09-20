@@ -19,7 +19,7 @@ export class SuccessScreen extends React.Component {
                  </div>
              </div>
              <div className={'page-content'}>
-                 <div className={'button-container'}>
+                 <div className={'flex-container'}>
                      <div className={'flat-btn flat-btn--white'} >
                          <div className={'flat-btn__caption'} onClick={() => this.onNewGameClick()}>New game</div>
                      </div>

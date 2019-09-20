@@ -9,6 +9,7 @@ import {StateService} from '../services/StateService'
 type ProcessingScreenState = {
     debug: boolean
     choose: boolean
+    remainingTime: string
 }
 
 export class ProcessingScreen extends React.Component<any, ProcessingScreenState> {
@@ -20,18 +21,36 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         this.state = {
             debug: false,
             choose: false,
+            remainingTime: '0',
         }
     }
 
     componentDidMount(): void {
+        this.stateService.onTimeChanged.add(this.onTimeChanged, this)
+        this.stateService.setTimer()
+        this.stateService.onChooseTempaiChanged.add(this.onChooseTempaiChanged, this)
         // this.stateService.onDebugChanged.add(this.updateState, this)
     }
 
     componentWillUnmount(): void {
+        this.stateService.onTimeChanged.remove(this.onTimeChanged, this)
+        this.stateService.onChooseTempaiChanged.remove(this.onChooseTempaiChanged, this)
         // this.stateService.onDebugChanged.remove(this.updateState, this)
     }
 
-    // updateState(value: boolean) {
+    onTimeChanged() {
+        this.setState({
+            remainingTime: this.stateService.remainingTimeStr,
+        })
+    }
+
+    onChooseTempaiChanged(value: boolean) {
+        this.setState({
+            choose: value
+        })
+    }
+
+    // onDebugChanged(value: boolean) {
     //     this.setState({
     //         debug: value,
     //     })
@@ -45,10 +64,6 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
 
     onTempaiClick() {
         this.stateService.chooseTempai(!this.state.choose)
-
-        this.setState({
-            choose: !this.state.choose
-        })
     }
 
     onGiveUpClick() {
@@ -69,7 +84,10 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                     </div>
                 </div>
                 <div className={'page-content'}>
-                    <div className={'button-container'}>
+                    <div className={'flex-container flex-container--between'}>
+                        <div className={'timer'}>
+                            {this.state.remainingTime}
+                        </div>
                         <div className={'flat-btn flat-btn--green' + (this.state.debug ? ' flat-btn--pressed' : '')} >
                             <div className={'flat-btn__caption'} onClick={() => this.onDebugClick()}>Debug</div>
                         </div>
@@ -81,7 +99,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                     <HandVisual selectable={true} reverse={true} hiddenTiles={!this.state.debug}/>
                     <DiscardVisual/>
 
-                    <div className={'button-container'}>
+                    <div className={'flex-container'}>
                         <div className={'flat-btn flat-btn--blue'} >
                             <div className={'flat-btn__caption'} onClick={() => this.onGiveUpClick()}>Give up</div>
                         </div>

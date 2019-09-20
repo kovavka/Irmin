@@ -1,0 +1,45 @@
+
+.tile {
+  padding: 1px;
+  width: calc((100% - 26px) / 13);
+
+  &.tile--tsumo {
+    margin-right: 2vw;
+  }
+
+
+  .tile__inner {
+    position: relative;
+
+    .tile__inner--discard {
+      width: 5vw;
+      max-width: 76px;
+      height: calc(5vw + 1px);
+      max-height: 76px;
+    }
+  }
+
+  .tile__box {
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .tile__drawing {
+    position: absolute;
+    z-index: 1;
+
+
+    &.tile__drawing--discard {
+      width: 60%;
+      top: 6%;
+      left: 20%;
+    }
+
+    &.tile__drawing--hand {
+      width: 75%;
+      top: 26%;
+      left: 12%;
+    }
+  }
+}

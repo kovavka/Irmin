@@ -52,7 +52,7 @@ export class DiscardVisual extends React.Component<any, DiscardState> {
 
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isDiscard={true} selectable={false} hidden={false} />
+            <TileVisual tile={tile} isTsumo={false} isDiscard={true} selectable={false} hidden={false} />
         )
     }
 

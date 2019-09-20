@@ -5,17 +5,23 @@ import signals from 'signals';
 import {TempaiService} from './TempaiService'
 
 export class StateService {
-    private _currentScreen = ScreenType.RULES
-    private showRules: boolean = false
-    private _chooseTempai: boolean = false
-    private timerTick = 0
-    private timer = undefined
-    // private _debug: boolean = false
     private handService = new HandService()
     private tempaiService = new TempaiService()
 
+    private _currentScreen = ScreenType.RULES
+    private showRules: boolean = false
+    private _chooseTempai: boolean = false
+    private _remainingTime: number = 0
+    private timer: NodeJS.Timeout | undefined = undefined
+    // private _debug: boolean = false
+
+    private _rememberInterval: number = 60
+    private _dropInterval: number = 10
+
     onChange: signals.Signal = new signals.Signal()
     onHandChanged: signals.Signal = new signals.Signal()
+    onTimeChanged: signals.Signal = new signals.Signal()
+    onChooseTempaiChanged: signals.Signal<boolean> = new signals.Signal()
     // onDebugChanged: signals.Signal<boolean> = new signals.Signal()
 
     private static _instance: StateService
@@ -55,16 +61,55 @@ export class StateService {
 
     private setScreen(screen: ScreenType) {
         this._currentScreen = screen
-        if (screen === ScreenType.MEMORIZING) {
-            this.clear()
-        }
+        this.clear()
 
         this.onChange.dispatch()
+    }
+
+    setTimer() {
+        this.clearTimer()
+
+        if (this._currentScreen === ScreenType.MEMORIZING) {
+            this._remainingTime = this._rememberInterval
+        }
+        if (this._currentScreen === ScreenType.PROCESSING) {
+            this._remainingTime = this._dropInterval
+        }
+
+        this.onTimeChanged.dispatch()
+        this.timer = setTimeout(() => this.onTimerTick(), 1000)
+    }
+
+    onTimerTick() {
+        if (this._remainingTime !== 0) {
+            this._remainingTime--
+            this.onTimeChanged.dispatch()
+            this.timer = setTimeout(() => this.onTimerTick(), 1000)
+        } else {
+            this.clearTimer()
+            if (this._currentScreen === ScreenType.MEMORIZING) {
+                this.nextScreen()
+            } else if (this._currentScreen === ScreenType.PROCESSING) {
+                if (this.tsumo) {
+                    this.dropTile(this.tsumo)
+                }
+                this.chooseTempai(false)
+            }
+        }
+    }
+
+    private clearTimer() {
+        if (this.timer) {
+            clearTimeout(this.timer)
+            this.timer = undefined
+        }
     }
 
     private clear() {
         this.showRules = false
         this._chooseTempai = false
+        this.clearTimer()
+        this._remainingTime = 0
     }
 
     selectTile(tile: Tile) {
@@ -90,7 +135,9 @@ export class StateService {
 
         if (this.handService.hasTiles) {
             this.handService.nextTile()
+
             this.onHandChanged.dispatch()
+            this.setTimer()
         } else {
             this.setScreen(ScreenType.FAIL)
         }
@@ -98,6 +145,7 @@ export class StateService {
 
     chooseTempai(value: boolean) {
         this._chooseTempai = value
+        this.onChooseTempaiChanged.dispatch(value)
     }
 
     // get debug(): boolean {
@@ -123,5 +171,13 @@ export class StateService {
 
     get discard(): Tile[] {
         return this.handService.getDiscard()
+    }
+
+    get remainingTimeStr(): string {
+        let sec = this._remainingTime % 60
+        let min = Math.round((this._remainingTime - sec) / 60)
+
+        let secStr = sec > 9 ? sec : '0' + sec
+        return `${min} : ${secStr}`
     }
 }

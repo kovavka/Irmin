@@ -22,7 +22,7 @@ export class RulesScreen extends React.Component {
                      blablabla
                  </div>
 
-                 <div className={'button-container'}>
+                 <div className={'flex-container'}>
                      <div className={'flat-btn flat-btn--green'}>
                          <div className={'flat-btn__caption'} onClick={() => this.onOkClick()}>Got it!</div>
                      </div>

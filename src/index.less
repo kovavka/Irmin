@@ -1,0 +1,128 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: #282c34;
+  color: #E6E6E6;
+  font-size: 24px;
+}
+
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.hand {
+  display: flex;
+
+  .hand--with-tsumo {
+    .tile {
+      width: calc((100% - 2vw - 28px) / 14);
+    }
+  }
+
+  .hand--selectable {
+    .tile:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  }
+}
+
+.timer {
+  height: 1em;
+}
+
+.discard {
+  margin-top: 64px;
+
+  .discard__line {
+    display: flex;
+  }
+}
+
+.page-content {
+
+}
+
+.page-header {
+  text-align: center;
+  margin: 32px 0;
+
+  .page-header__title {
+    font-size: 36px;
+  }
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 36px 0;
+
+  &.flex-container--between {
+    justify-content: space-between;
+  }
+
+  .flat-btn:not(:first-child) {
+    margin-left: 10px;
+  }
+}
+
+.flat-btn  {
+  font-size: 18px;
+  width: 120px;
+  height: 35px;
+  line-height: 30px;
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .flat-btn--pressed {
+    webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
+    outline: none;
+  }
+
+  &.flat-btn--green {
+    background-color: #ADF6B1;
+  }
+
+  &.flat-btn--blue {
+    background-color: #2bced4;
+
+    &.flat-btn--pressed {
+      box-shadow: 0px 0px 0 2px #19f7ff;
+      background-color: #11b1b7;
+    }
+  }
+
+  &.flat-btn--white {
+    background-color: #fff;
+    border: solid 1px #E6E6E6;
+
+    &:active {
+      background-color: #9e9e9e;
+    }
+  }
+
+  .flat-btn__caption {
+    color: black;
+    text-align: center;
+    width: 100%;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}

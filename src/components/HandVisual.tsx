@@ -50,18 +50,29 @@ export class HandVisual extends React.Component<HandProps, HandState> {
 
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isDiscard={false} selectable={this.props.selectable} hidden={this.props.hiddenTiles}/>
+            <TileVisual tile={tile} isTsumo={false} isDiscard={false} selectable={this.props.selectable} hidden={this.props.hiddenTiles}/>
         )
+    }
+
+    getClassName() {
+        let names = 'hand'
+
+        if (this.props.selectable) {
+            names += ' hand--selectable'
+        }
+        if (this.state.tsumo) {
+            names += ' hand--with-tsumo'
+        }
+
+        return names
     }
 
     render() {
      return (
-         <div className={'hand' + (this.props.selectable ? ' hand--selectable' : '')}>
-             <div className={'hand__tsumo'}>
-                {this.state.tsumo && (
-                    <TileVisual tile={this.state.tsumo} isDiscard={false} selectable={this.props.selectable} hidden={false}/>
-                )}
-             </div>
+         <div className={this.getClassName()}>
+            {this.state.tsumo && (
+                <TileVisual tile={this.state.tsumo} isTsumo={true} isDiscard={false} selectable={this.props.selectable} hidden={false}/>
+            )}
              {this.getHand()}
          </div>
      )
