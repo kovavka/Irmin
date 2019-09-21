@@ -30,8 +30,8 @@ export class TileVisual extends React.Component<TileDrawingProps> {
 
     render() {
      return (
-         <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '')} onClick={() => this.onTileSelected()}>
-             <div className={'tile__inner' + (this.props.isDiscard ? ' tile__inner--discard' : '')}>
+         <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '') + (this.props.isDiscard ? ' tile--discard' : '')} onClick={() => this.onTileSelected()}>
+             <div className={'tile__inner'}>
                  {this.props.isDiscard && (
                      <img className={'tile__box tile__box--discard'} src={discardTile}/>
                  )}

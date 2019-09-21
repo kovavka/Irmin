@@ -1,22 +1,18 @@
 
 .tile {
   padding: 1px;
-  width: calc((100% - 26px) / 13);
 
   &.tile--tsumo {
     margin-right: 2vw;
+  }
+  &.tile--discard  {
+    width: calc((100% - 26px) / 6);
   }
 
 
   .tile__inner {
     position: relative;
-
-    .tile__inner--discard {
-      width: 5vw;
-      max-width: 76px;
-      height: calc(5vw + 1px);
-      max-height: 76px;
-    }
+    line-height: 0;
   }
 
   .tile__box {

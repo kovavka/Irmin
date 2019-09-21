@@ -49,7 +49,6 @@ export class DiscardVisual extends React.Component<any, DiscardState> {
         })
     }
 
-
     getTile(tile: Tile) {
         return (
             <TileVisual tile={tile} isTsumo={false} isDiscard={true} selectable={false} hidden={false} />

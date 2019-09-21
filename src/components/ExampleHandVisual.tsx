@@ -11,7 +11,7 @@ export class ExampleHandVisual extends React.Component {
 
     render() {
      return (
-         <div className={'hand'}>
+         <div className={'hand hand--example'}>
              {this.getTile({value: 7, suit: 3})}
              {this.getTile({value: 6, suit: 3})}
              {this.getTile({value: 5, suit: 3})}
