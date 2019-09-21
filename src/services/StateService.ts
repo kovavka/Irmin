@@ -55,8 +55,8 @@ export class StateService {
                 }
                 break
             case ScreenType.MEMORIZING:
-                this.setScreen(ScreenType.PROCESSING)
                 this.handService.nextTile()
+                this.setScreen(ScreenType.PROCESSING)
                 break
             case ScreenType.PROCESSING:
                 this.setScreen(ScreenType.FAIL)
