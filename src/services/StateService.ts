@@ -3,19 +3,23 @@ import {HandService} from './HandService'
 import {Tile} from '../types/Tile'
 import signals from 'signals';
 import {TempaiService} from './TempaiService'
+import {Settings, SettingsStorage} from './SettingsStorage'
 
 export class StateService {
     private handService = new HandService()
     private tempaiService = new TempaiService()
+    private settingsStorage: SettingsStorage = SettingsStorage.instance
 
     private initialized = false
     // private tileToDiscard: Tile | undefined = undefined
-    private _currentScreen: ScreenType = ScreenType.RULES
+    // @ts-ignore
+    private _currentScreen: ScreenType
     private previousScreen: ScreenType | undefined = undefined
     private showRules: boolean = false
     private _chooseTempai: boolean = false
     private _remainingTime: number = 0
     private timer: NodeJS.Timeout | undefined = undefined
+
     // private _debug: boolean = false
 
     private _rememberInterval: number = 60
@@ -36,23 +40,22 @@ export class StateService {
     }
 
     private constructor() {
-        this.handService.generate()
+        this.setFirstScreen(this.getSettings().hasVisited ? ScreenType.MEMORIZING : ScreenType.RULES)
     }
 
     nextScreen() {
         switch (this._currentScreen) {
             case ScreenType.RULES:
-                if(!this.initialized) {
-                    this.initialized = true
-                    this.setScreen(ScreenType.MEMORIZING)
+                this.setSettings({
+                    hasVisited: true
+                })
+                
+                if (this.previousScreen) {
+                    this.setScreen(this.previousScreen)
+                    this.previousScreen = undefined
                 } else {
-                    if (this.previousScreen) {
-                        this.setScreen(this.previousScreen)
-                        this.previousScreen = undefined
-                    } else {
-                        this.handService.generate()
-                        this.setScreen(ScreenType.MEMORIZING)
-                    }
+                    this.handService.generate()
+                    this.setScreen(ScreenType.MEMORIZING)
                 }
                 break
             case ScreenType.MEMORIZING:
@@ -86,11 +89,34 @@ export class StateService {
         }
     }
 
+    private setFirstScreen(screen: ScreenType) {
+        if (screen !== ScreenType.RULES && screen !== ScreenType.MEMORIZING) {
+            throw new Error()
+        }
+
+        if (screen === ScreenType.RULES) {
+            this._currentScreen = ScreenType.RULES
+        } else {
+            this._currentScreen = ScreenType.MEMORIZING
+            this.handService.generate()
+        }
+
+        this.initialized = true
+    }
+
     private setScreen(screen: ScreenType) {
         this._currentScreen = screen
         this.clear()
 
         this.onChange.dispatch()
+    }
+
+    setSettings(settings: Settings) {
+        this.settingsStorage.setSettings(settings)
+    }
+
+    getSettings(): Settings {
+        return this.settingsStorage.getSettings()
     }
 
     setTimer() {
