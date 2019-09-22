@@ -33,7 +33,7 @@ export class RulesScreen extends React.Component {
                      <br/><br/>
                      If your change your mind or make a mistake press the button to continue collecting hand.
                  </div>
-                 <div className={'flex-container'}>
+                 <div className={'flex-container flex-container--end'}>
                      <div className={'flat-btn flat-btn--green'}>
                          <div className={'flat-btn__caption'} onClick={() => this.onOkClick()}>Got it!</div>
                      </div>

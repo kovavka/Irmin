@@ -14,7 +14,7 @@ export class FailScreen extends React.Component {
                     </div>
                 </div>
                 <div className={'page-content'}>
-                    <div className={'flex-container'}>
+                    <div className={'flex-container flex-container--end'}>
                         <NewGameBtn/>
                     </div>
 

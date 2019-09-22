@@ -95,13 +95,15 @@ ul {
 .flex-container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   margin: 36px 0;
 
   &.flex-container--margin-s {
     margin: 8px 0;
   }
 
+  &.flex-container--end {
+    justify-content: flex-end;
+  }
   &.flex-container--between {
     justify-content: space-between;
   }
@@ -165,4 +167,46 @@ ul {
     -webkit-user-drag: none;
     user-select: none;
   }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 8px;
+
+  .switch__box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 11px;
+    background-color: #bfbfbf;
+
+    &.switch__box--on {
+      background-color: #479dd0;
+    }
+  }
+
+  .switch__button {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    right: 17px;
+    left: 2px;
+    background-color: white;
+    border-radius: 9px;
+    transition: all 100ms ease;
+
+    &.switch__button--on {
+      right: 2px;
+      left: 15px;
+    }
+  }
+
 }

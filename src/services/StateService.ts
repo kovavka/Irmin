@@ -49,7 +49,7 @@ export class StateService {
                 this.setSettings({
                     hasVisited: true
                 })
-                
+
                 if (this.previousScreen) {
                     this.setScreen(this.previousScreen)
                     this.previousScreen = undefined

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {StateService} from '../services/StateService'
-import {ExampleHandVisual} from '../components/ExampleHandVisual'
 
 export class AboutScreen extends React.Component {
     stateService: StateService = StateService.instance
@@ -18,7 +17,7 @@ export class AboutScreen extends React.Component {
                  </div>
              </div>
              <div className={'page-content'}>
-                 <div className={'rules'}>
+                 <div className={'about'}>
                      Irmin is a God of <i>who knows what</i>. That's how much you know about your hand in this game.
                      <br/><br/>
                      This project is kind of riichi mahjong for two (but online and for one), memory trainer.

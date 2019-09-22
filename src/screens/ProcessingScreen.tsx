@@ -100,7 +100,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                     <HandVisual selectable={true} reverse={true} hiddenTiles={!this.state.debug}/>
                     <DiscardVisual/>
 
-                    <div className={'flex-container'}>
+                    <div className={'flex-container flex-container--end'}>
                         <div className={'flat-btn flat-btn--red'} >
                             <div className={'flat-btn__caption'} onClick={() => this.onGiveUpClick()}>Give up</div>
                         </div>
