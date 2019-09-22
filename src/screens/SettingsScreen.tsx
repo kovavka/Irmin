@@ -1,13 +1,12 @@
 import * as React from 'react'
 import {StateService} from '../services/StateService'
-import {ExampleHandVisual} from '../components/ExampleHandVisual'
+import {NewGameBtn} from '../components/NewGameBtn'
 
 export class SettingsScreen extends React.Component {
     stateService: StateService = StateService.instance
 
     onOkClick() {
         // this.stateService.setSettings()
-        this.stateService.nextScreen()
     }
 
     render() {
@@ -23,9 +22,7 @@ export class SettingsScreen extends React.Component {
 
                  </div>
                  <div className={'flex-container'}>
-                     <div className={'flat-btn flat-btn--white'}>
-                         <div className={'flat-btn__caption'} onClick={() => this.onOkClick()}>New game</div>
-                     </div>
+                     <NewGameBtn onClick={() => this.onOkClick()}/>
                  </div>
              </div>
          </div>

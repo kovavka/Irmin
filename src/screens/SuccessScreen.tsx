@@ -1,16 +1,10 @@
 import * as React from "react";
 import {HandVisual} from '../components/HandVisual'
 import {DiscardVisual} from '../components/DiscardVisual'
-import {StateService} from '../services/StateService'
 import {Footer} from '../components/Footer'
+import {NewGameBtn} from '../components/NewGameBtn'
 
 export class SuccessScreen extends React.Component {
-    stateService: StateService = StateService.instance
-
-    onNewGameClick() {
-        this.stateService.nextScreen()
-    }
-
     render() {
      return (
          <div>
@@ -21,9 +15,7 @@ export class SuccessScreen extends React.Component {
              </div>
              <div className={'page-content'}>
                  <div className={'flex-container'}>
-                     <div className={'flat-btn flat-btn--white'} >
-                         <div className={'flat-btn__caption'} onClick={() => this.onNewGameClick()}>New game</div>
-                     </div>
+                     <NewGameBtn/>
                  </div>
 
                  <HandVisual selectable={false} reverse={false} hiddenTiles={false}/>

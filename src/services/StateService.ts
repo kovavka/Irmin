@@ -9,6 +9,7 @@ export class StateService {
     private tempaiService = new TempaiService()
 
     private initialized = false
+    // private tileToDiscard: Tile | undefined = undefined
     private _currentScreen: ScreenType = ScreenType.RULES
     private previousScreen: ScreenType | undefined = undefined
     private showRules: boolean = false
@@ -158,15 +159,17 @@ export class StateService {
 
     dropTile(tile: Tile) {
         this.handService.dropTile(tile)
+        setTimeout(() => {
+            if (this.handService.hasTiles) {
+                this.handService.nextTile()
 
-        if (this.handService.hasTiles) {
-            this.handService.nextTile()
+                this.onHandChanged.dispatch()
+                this.setTimer()
+            } else {
+                this.setScreen(ScreenType.FAIL)
+            }
+        }, 200)
 
-            this.onHandChanged.dispatch()
-            this.setTimer()
-        } else {
-            this.setScreen(ScreenType.FAIL)
-        }
     }
 
     chooseTempai(value: boolean) {
