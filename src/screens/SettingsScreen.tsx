@@ -2,7 +2,7 @@ import * as React from 'react'
 import {StateService} from '../services/StateService'
 import {NewGameBtn} from '../components/NewGameBtn'
 import {Switch} from '../components/Switch'
-import {Settings} from '../services/SettingsStorage'
+import {SettingsType} from '../types/Settings'
 
 type SettingsScreenState = {
     defaultSettings: boolean
@@ -24,10 +24,6 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
             invertTiles: settings.invertTiles!,
             hideTiles: settings.hideTiles!,
         }
-    }
-
-    onOkClick() {
-        this.stateService.nextScreen()
     }
 
     onDefaultSettingsClick() {
@@ -67,7 +63,7 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
         }
     }
 
-    private setValue(settings: Settings) {
+    private setValue(settings: SettingsType) {
         this.stateService.setSettings(settings)
     }
 
@@ -112,7 +108,7 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
                         </div>
                     </div>
                     <div className='flex-container flex-container--end'>
-                        <NewGameBtn onClick={() => this.onOkClick()}/>
+                        <NewGameBtn/>
                     </div>
                 </div>
             </div>

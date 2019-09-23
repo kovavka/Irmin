@@ -3,7 +3,11 @@ import {HandService} from './HandService'
 import {Tile} from '../types/Tile'
 import signals from 'signals';
 import {TempaiService} from './TempaiService'
-import {Settings, SettingsStorage} from './SettingsStorage'
+import {SettingsStorage} from './SettingsStorage'
+import {Settings, SettingsType} from '../types/Settings'
+
+const REMEMBER_INTERVAL = 60
+const DROP_INTERVAL = 10
 
 export class StateService {
     private handService = new HandService()
@@ -11,7 +15,6 @@ export class StateService {
     private settingsStorage: SettingsStorage = SettingsStorage.instance
 
     private initialized = false
-    // private tileToDiscard: Tile | undefined = undefined
     // @ts-ignore
     private _currentScreen: ScreenType
     private previousScreen: ScreenType | undefined = undefined
@@ -20,16 +23,10 @@ export class StateService {
     private _remainingTime: number = 0
     private timer: NodeJS.Timeout | undefined = undefined
 
-    // private _debug: boolean = false
-
-    private _rememberInterval: number = 60
-    private _dropInterval: number = 10
-
     onChange: signals.Signal = new signals.Signal()
     onHandChanged: signals.Signal = new signals.Signal()
     onTimeChanged: signals.Signal = new signals.Signal()
     onChooseTempaiChanged: signals.Signal<boolean> = new signals.Signal()
-    // onDebugChanged: signals.Signal<boolean> = new signals.Signal()
 
     private static _instance: StateService
     static get instance(): StateService {
@@ -111,7 +108,7 @@ export class StateService {
         this.onChange.dispatch()
     }
 
-    setSettings(settings: Settings) {
+    setSettings(settings: SettingsType) {
         this.settingsStorage.setSettings(settings)
     }
 
@@ -119,18 +116,30 @@ export class StateService {
         return this.settingsStorage.getSettings()
     }
 
+    get hideTiles(): boolean {
+        return this.getSettings().hideTiles
+    }
+    get useTimer(): boolean {
+        return this.getSettings().useTimer
+    }
+    get invertTiles(): boolean {
+        return this.getSettings().invertTiles
+    }
+
     setTimer() {
-        this.clearTimer()
+        if (this.useTimer) {
+            this.clearTimer()
 
-        if (this._currentScreen === ScreenType.MEMORIZING) {
-            this._remainingTime = this._rememberInterval
-        }
-        if (this._currentScreen === ScreenType.PROCESSING) {
-            this._remainingTime = this._dropInterval
-        }
+            if (this._currentScreen === ScreenType.MEMORIZING) {
+                this._remainingTime = REMEMBER_INTERVAL
+            }
+            if (this._currentScreen === ScreenType.PROCESSING) {
+                this._remainingTime = DROP_INTERVAL
+            }
 
-        this.onTimeChanged.dispatch()
-        this.timer = setTimeout(() => this.onTimerTick(), 1000)
+            this.onTimeChanged.dispatch()
+            this.timer = setTimeout(() => this.onTimerTick(), 1000)
+        }
     }
 
     onTimerTick() {
@@ -220,16 +229,6 @@ export class StateService {
         this.previousScreen = this.currentScreen
         this.setScreen(ScreenType.ABOUT)
     }
-
-
-    // get debug(): boolean {
-    //     return this._debug
-    // }
-
-    // debug(value: boolean) {
-    //     this._debug = value
-    //     this.onDebugChanged.dispatch()
-    // }
 
     get currentScreen(): ScreenType {
         return this._currentScreen

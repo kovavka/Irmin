@@ -4,6 +4,7 @@ import {StateService} from '../services/StateService'
 import {Footer} from '../components/Footer'
 
 type MemorizingScreenState = {
+    useTimer: boolean
     remainingTime: string
 }
 
@@ -14,6 +15,7 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
         super(props)
 
         this.state = {
+            useTimer: this.stateService.useTimer,
             remainingTime: '0',
         }
     }
@@ -38,6 +40,7 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
     }
 
     render() {
+        const {useTimer, remainingTime} = this.state
         return (
             <div>
                 <div className={'page-header'}>
@@ -46,11 +49,12 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
                     </div>
                 </div>
                 <div className={'page-content'}>
-                    <div className={'flex-container flex-container--between'}>
-                        <div className={'timer'}>
-                            {this.state.remainingTime}
-                        </div>
-
+                    <div className={'flex-container' + (useTimer ? ' flex-container--between' : ' flex-container--end')}>
+                        {useTimer && (
+                            <div className={'timer'}>
+                                {remainingTime}
+                            </div>
+                        )}
                         <div className={'flat-btn flat-btn--green'} >
                             <div className={'flat-btn__caption'} onClick={() => this.goNext()}>Ready!</div>
                         </div>

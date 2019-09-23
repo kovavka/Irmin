@@ -1,12 +1,7 @@
-export interface Settings {
-    hasVisited?: boolean
-    defaultSettings?: boolean
-    useTimer?: boolean
-    invertTiles?: boolean
-    hideTiles?: boolean
-}
+import {Settings, SettingsType} from '../types/Settings'
 
 export class SettingsStorage {
+    // @ts-ignore
     private settings: Settings = {}
 
     private static _instance: SettingsStorage
@@ -21,7 +16,7 @@ export class SettingsStorage {
         this.readSettings()
     }
 
-    setSettings(settings: Settings) {
+    setSettings(settings: SettingsType) {
         for (let key in settings) {
             // @ts-ignore
             let value = settings[key]
