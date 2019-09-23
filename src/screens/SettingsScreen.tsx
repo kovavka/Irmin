@@ -2,44 +2,120 @@ import * as React from 'react'
 import {StateService} from '../services/StateService'
 import {NewGameBtn} from '../components/NewGameBtn'
 import {Switch} from '../components/Switch'
+import {Settings} from '../services/SettingsStorage'
 
-export class SettingsScreen extends React.Component {
+type SettingsScreenState = {
+    defaultSettings: boolean
+    useTimer: boolean
+    invertTiles: boolean
+    hideTiles: boolean
+}
+
+export class SettingsScreen extends React.Component<any, SettingsScreenState> {
     stateService: StateService = StateService.instance
 
-    onOkClick() {
-        // this.stateService.setSettings()
+    constructor(props: any) {
+        super(props)
+
+        let settings = this.stateService.getSettings()
+        this.state = {
+            defaultSettings: settings.defaultSettings!,
+            useTimer: settings.useTimer!,
+            invertTiles: settings.invertTiles!,
+            hideTiles: settings.hideTiles!,
+        }
     }
 
-    value = false
+    onOkClick() {
+        this.stateService.nextScreen()
+    }
 
-    setValue() {
-        this.value = !this.value
-        this.setState({})
+    onDefaultSettingsClick() {
+        let item = {
+            defaultSettings: !this.state.defaultSettings
+        }
+        this.setState(item)
+    }
+
+    onUseTimerClick() {
+        if (!this.state.defaultSettings) {
+            let item = {
+                useTimer: !this.state.useTimer
+            }
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    onInvertTilesClick() {
+        if (!this.state.defaultSettings) {
+            let item = {
+                invertTiles: !this.state.invertTiles
+            }
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    onHideTilesClick() {
+        if (!this.state.defaultSettings) {
+            let item = {
+                hideTiles: !this.state.hideTiles
+            }
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    private setValue(settings: Settings) {
+        this.stateService.setSettings(settings)
     }
 
     render() {
-     return (
-         <div className='rules'>
-             <div className='page-header'>
-                 <div className='page-header__title'>
-                     Settings
-                 </div>
-             </div>
-             <div className='page-content'>
-                 <div className='settings'>
-                     <div className='flex-container'>
+        const {defaultSettings, useTimer, invertTiles, hideTiles} = this.state
+        return (
+            <div className='rules'>
+                <div className='page-header'>
+                    <div className='page-header__title'>
+                        Settings
+                    </div>
+                </div>
+                <div className='page-content settings'>
+                    <div className='flex-container'>
                         <Switch
-                            switched={this.value}
-                            onToggle={() => this.setValue()}
+                            switched={defaultSettings}
+                            onToggle={() => this.onDefaultSettingsClick()}
                         />
                         <div>Default settings</div>
-                     </div>
-                 </div>
-                 <div className='flex-container flex-container--end'>
-                     <NewGameBtn onClick={() => this.onOkClick()}/>
-                 </div>
-             </div>
-         </div>
-     )
+                    </div>
+                    <div className={'settings__options' + (defaultSettings ? ' settings__options--disabled' : '')}>
+                        <div className='flex-container flex-container--margin-m'>
+                            <Switch
+                                switched={useTimer}
+                                onToggle={() => this.onUseTimerClick()}
+                            />
+                            <div>Use timer</div>
+                        </div>
+                        <div className='flex-container flex-container--margin-m'>
+                            <Switch
+                                switched={invertTiles}
+                                onToggle={() => this.onInvertTilesClick()}
+                            />
+                            <div>Invert tiles</div>
+                        </div>
+                        <div className='flex-container flex-container--margin-m'>
+                            <Switch
+                                switched={hideTiles}
+                                onToggle={() => this.onHideTilesClick()}
+                            />
+                            <div>Hide tiles</div>
+                        </div>
+                    </div>
+                    <div className='flex-container flex-container--end'>
+                        <NewGameBtn onClick={() => this.onOkClick()}/>
+                    </div>
+                </div>
+            </div>
+        )
     }
 }

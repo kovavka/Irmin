@@ -100,6 +100,9 @@ ul {
   &.flex-container--margin-s {
     margin: 8px 0;
   }
+  &.flex-container--margin-m {
+    margin: 16px 0;
+  }
 
   &.flex-container--end {
     justify-content: flex-end;
@@ -197,7 +200,7 @@ ul {
     position: absolute;
     top: 2px;
     bottom: 2px;
-    right: 17px;
+    right: 15px;
     left: 2px;
     background-color: white;
     border-radius: 9px;
@@ -208,5 +211,18 @@ ul {
       left: 15px;
     }
   }
+}
 
+.settings {
+  .settings__options{
+    margin-left: 50px;
+
+    &.settings__options--disabled {
+      opacity: 0.3;
+
+      .switch {
+        cursor: default;
+      }
+    }
+  }
 }

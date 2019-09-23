@@ -1,6 +1,9 @@
 export interface Settings {
     hasVisited?: boolean
-    hasTimer?: boolean
+    defaultSettings?: boolean
+    useTimer?: boolean
+    invertTiles?: boolean
+    hideTiles?: boolean
 }
 
 export class SettingsStorage {
@@ -33,9 +36,18 @@ export class SettingsStorage {
     }
 
     private readSettings() {
-        this.settings = <Settings> {
-            hasVisited: this.getBoolValue('hasVisited'),
-            hasTimer: this.getBoolValue('hasTimer'),
+        let hasVisited = this.getBoolValue('hasVisited', false)
+        let useTimer = this.getBoolValue('useTimer', true)
+        let invertTiles = this.getBoolValue('invertTiles', true)
+        let hideTiles = this.getBoolValue('hideTiles', true)
+
+        let defaultSettings = useTimer && invertTiles && hideTiles
+        this.settings = <Settings>{
+            hasVisited: hasVisited,
+            defaultSettings: defaultSettings,
+            useTimer: useTimer,
+            invertTiles: invertTiles,
+            hideTiles: hideTiles,
         }
     }
 
@@ -43,12 +55,20 @@ export class SettingsStorage {
         return localStorage.getItem(key)
     }
 
-    private getBoolValue(key: string): boolean {
-        return this.getValue(key) == 'true'
+    private getBoolValue(key: string, defaultValue: boolean): boolean {
+
+        switch (this.getValue(key)) {
+            case 'true':
+                return true
+            case 'false':
+                return false
+            default:
+                return defaultValue
+        }
+
     }
 
     private setItem(key: string, value: any) {
         return localStorage.setItem(key, value)
     }
-
 }
