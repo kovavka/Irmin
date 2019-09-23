@@ -18,7 +18,7 @@ export class FailScreen extends React.Component {
                         <NewGameBtn/>
                     </div>
 
-                    <HandVisual selectable={false} reverse={false} hiddenTiles={false}/>
+                    <HandVisual selectable={false} isOpenHand={true} reverse={false} hiddenTiles={false}/>
                     <DiscardVisual/>
                 </div>
                 <Footer/>

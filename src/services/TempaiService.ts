@@ -240,14 +240,13 @@ export class TempaiService {
 
     //OrSimpleTankiRyanpeikou
     private isChiitoi(suits: HandStructure) {
-        let uniqueFilter = (v: number, i: number, a: number[]) => a.indexOf(v) === i
-        let manPairs = suits.manSuit ? this.getPairs(suits.manSuit).filter(uniqueFilter) : []
-        let pinPairs = suits.pinSuit ? this.getPairs(suits.pinSuit).filter(uniqueFilter) : []
-        let souPairs = suits.souSuit ? this.getPairs(suits.souSuit).filter(uniqueFilter) : []
-        let honorPairs = suits.honors ? this.getPairs(suits.honors).filter(uniqueFilter) : []
+        let manPairs = suits.manSuit ? this.getPairs(suits.manSuit, false) : []
+        let pinPairs = suits.pinSuit ? this.getPairs(suits.pinSuit, false) : []
+        let souPairs = suits.souSuit ? this.getPairs(suits.souSuit, false) : []
+        let honorPairs = suits.honors ? this.getPairs(suits.honors, false) : []
 
-        let allUniquePairsCount = manPairs.length + pinPairs.length + souPairs.length + honorPairs.length
-        return allUniquePairsCount === 6
+        let allPairsCount = manPairs.length + pinPairs.length + souPairs.length + honorPairs.length
+        return allPairsCount === 6
     }
 
     private isKokushiMuso(suits: HandStructure, hand: string) {
@@ -453,11 +452,15 @@ export class TempaiService {
         return true
     }
 
-    private getPairs(handPart: number[]): number[] {
+    private getPairs(handPart: number[], onlyUnique: boolean = true): number[] {
         let unique = handPart.filter((x, i, a) => a.indexOf(x) == i)
         let pairs: number[] = []
         for (let tile of unique) {
             if (this.includesFrom(handPart, tile, tile)) {
+                pairs.push(tile)
+            }
+            //if 2222 considered as 22 and 22 pairs
+            if (!onlyUnique && this.includesFrom(handPart, tile, tile, tile, tile)) {
                 pairs.push(tile)
             }
         }

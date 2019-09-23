@@ -25,8 +25,12 @@ export class AboutScreen extends React.Component {
                      Repo: <a href={'https://github.com/kovavka/irmin'}>GitHub</a><br/>
                      Me:
                      <ul>
-                         <li>t.me/kovavka</li>
-                         <li>kovavka@gmail.com</li>
+                         <li>
+                             <a target={'blank'} href={'https://t.me/kovavka'}>t.me/kovavka</a>
+                         </li>
+                         <li>
+                             <a target={'blank'} href={'mailto:kovavka@gmail.com'}>kovavka@gmail.com</a>
+                         </li>
                      </ul>
                      <br/>
                      <br/>

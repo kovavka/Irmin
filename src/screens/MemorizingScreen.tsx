@@ -60,7 +60,7 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
                         </div>
                     </div>
 
-                    <HandVisual selectable={false} reverse={false} hiddenTiles={false} />
+                    <HandVisual selectable={false} isOpenHand={false} reverse={false} hiddenTiles={false} />
                 </div>
                 <Footer/>
             </div>

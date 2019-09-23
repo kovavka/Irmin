@@ -83,7 +83,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                             <div className={'flat-btn__caption'} onClick={() => this.onTempaiClick()}>Tempai!</div>
                         </div>
                     </div>
-                    <HandVisual selectable={true} reverse={invertTiles} hiddenTiles={hideTiles}/>
+                    <HandVisual selectable={true} isOpenHand={false} reverse={invertTiles} hiddenTiles={hideTiles}/>
                     <DiscardVisual/>
                     <div className={'flex-container flex-container--end'}>
                         <div className={'flat-btn flat-btn--red'} >

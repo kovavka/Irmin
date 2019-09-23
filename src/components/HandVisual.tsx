@@ -1,9 +1,7 @@
 import * as React from "react";
 import {TileVisual} from "./TileVisual";
 import {Tile} from "../types/Tile";
-import discard from '../img/tile-discard.svg';
 import {StateService} from '../services/StateService'
-import {ScreenType} from '../types/ScreenType'
 
 type HandState = {
     tiles: Tile[]
@@ -14,6 +12,7 @@ type HandProps = {
     selectable: boolean
     reverse: boolean
     hiddenTiles: boolean
+    isOpenHand: boolean
 }
 
 export class HandVisual extends React.Component<HandProps, HandState> {
@@ -49,7 +48,12 @@ export class HandVisual extends React.Component<HandProps, HandState> {
 
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isTsumo={false} isDiscard={false} selectable={this.props.selectable} hidden={this.props.hiddenTiles}/>
+            <TileVisual tile={tile}
+                        isTsumo={false}
+                        isOpen={this.props.isOpenHand}
+                        selectable={this.props.selectable}
+                        hidden={this.props.hiddenTiles}
+            />
         )
     }
 
@@ -70,7 +74,13 @@ export class HandVisual extends React.Component<HandProps, HandState> {
      return (
          <div className={this.getClassName()}>
             {this.state.tsumo && (
-                <TileVisual tile={this.state.tsumo} isTsumo={true} isDiscard={false} selectable={this.props.selectable} hidden={false}/>
+                <TileVisual
+                    tile={this.state.tsumo}
+                    isTsumo={true}
+                    isOpen={this.props.isOpenHand}
+                    selectable={this.props.selectable}
+                    hidden={false}
+                />
             )}
              {this.getHand()}
          </div>
