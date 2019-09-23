@@ -26,6 +26,10 @@ export class HandService {
         return this.tsumo
     }
 
+    get remainingTiles(): number {
+        return this.wall.length
+    }
+
     getDiscard(): Tile[] {
         return this.discard.slice(0)
     }

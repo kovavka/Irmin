@@ -242,6 +242,15 @@ export class StateService {
         return this.handService.getTsumo()
     }
 
+    get remainingTiles(): string {
+        let count = this.handService.remainingTiles
+        if (count > 9) {
+            return count.toString()
+        }
+
+        return '0' + count
+    }
+
     get discard(): Tile[] {
         return this.handService.getDiscard()
     }

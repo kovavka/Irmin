@@ -10,6 +10,7 @@ type ProcessingScreenState = {
     invertTiles: boolean
     choose: boolean
     remainingTime: string
+    remainingTiles: string
 }
 
 export class ProcessingScreen extends React.Component<any, ProcessingScreenState> {
@@ -19,11 +20,12 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         super(props)
 
         this.state = {
-            hideTiles:  this.stateService.hideTiles,
-            useTimer:  this.stateService.useTimer,
+            hideTiles: this.stateService.hideTiles,
+            useTimer: this.stateService.useTimer,
             invertTiles:  this.stateService.invertTiles,
             choose: false,
             remainingTime: '0',
+            remainingTiles: this.stateService.remainingTiles,
         }
     }
 
@@ -31,11 +33,13 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         this.stateService.onTimeChanged.add(this.onTimeChanged, this)
         this.stateService.setTimer()
         this.stateService.onChooseTempaiChanged.add(this.onChooseTempaiChanged, this)
+        this.stateService.onHandChanged.add(this.onHandChanged, this)
     }
 
     componentWillUnmount(): void {
         this.stateService.onTimeChanged.remove(this.onTimeChanged, this)
         this.stateService.onChooseTempaiChanged.remove(this.onChooseTempaiChanged, this)
+        this.stateService.onHandChanged.remove(this.onHandChanged, this)
     }
 
     onTimeChanged() {
@@ -50,6 +54,12 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         })
     }
 
+    onHandChanged() {
+        this.setState({
+            remainingTiles: this.stateService.remainingTiles,
+        })
+    }
+
     onTempaiClick() {
         this.stateService.chooseTempai(!this.state.choose)
     }
@@ -59,7 +69,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     render() {
-        const {hideTiles, useTimer, invertTiles, choose, remainingTime} = this.state
+        const {hideTiles, useTimer, invertTiles, choose, remainingTime, remainingTiles} = this.state
         return (
             <div>
                 <div className={'page-header'}>
@@ -84,6 +94,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                         </div>
                     </div>
                     <HandVisual selectable={true} isOpenHand={false} reverse={invertTiles} hiddenTiles={hideTiles}/>
+                    <div className='remaining-tiles'>x{remainingTiles}</div>
                     <DiscardVisual/>
                     <div className={'flex-container flex-container--end'}>
                         <div className={'flat-btn flat-btn--red'} >
