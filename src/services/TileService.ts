@@ -18,14 +18,14 @@ export class TileService {
         if (value > 0 && value < 10) {
             return require(`../img/man${value}.svg`)
         }
-        throw new Error()
+        throw new Error(`${value} is incorrect value for man suit`)
     }
 
     private static getPinTile(value: number) {
         if (value > 0 && value < 10) {
             return require(`../img/pin${value}.svg`)
         }
-        throw new Error()
+        throw new Error(`${value} is incorrect value for pin suit`)
     }
 
 
@@ -33,7 +33,7 @@ export class TileService {
         if (value > 0 && value < 10) {
             return require(`../img/sou${value}.svg`)
         }
-        throw new Error()
+        throw new Error(`${value} is incorrect value for sou suit`)
     }
 
     private static getJihaiTile(value: number) {
@@ -53,7 +53,7 @@ export class TileService {
             case 7:
                 return require(`../img/jihaiPei.svg`)
             default:
-                throw new Error()
+                throw new Error(`${value} is incorrect value for jihai suit`)
         }
     }
 }

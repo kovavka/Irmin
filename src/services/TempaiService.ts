@@ -240,10 +240,10 @@ export class TempaiService {
 
     //OrSimpleTankiRyanpeikou
     private isChiitoi(suits: HandStructure) {
-        let manPairs = suits.manSuit ? this.getPairs(suits.manSuit, false) : []
-        let pinPairs = suits.pinSuit ? this.getPairs(suits.pinSuit, false) : []
-        let souPairs = suits.souSuit ? this.getPairs(suits.souSuit, false) : []
-        let honorPairs = suits.honors ? this.getPairs(suits.honors, false) : []
+        let manPairs = suits.manSuit ? this.getPairs(suits.manSuit) : []
+        let pinPairs = suits.pinSuit ? this.getPairs(suits.pinSuit) : []
+        let souPairs = suits.souSuit ? this.getPairs(suits.souSuit) : []
+        let honorPairs = suits.honors ? this.getPairs(suits.honors) : []
 
         let allPairsCount = manPairs.length + pinPairs.length + souPairs.length + honorPairs.length
         return allPairsCount === 6
@@ -452,15 +452,11 @@ export class TempaiService {
         return true
     }
 
-    private getPairs(handPart: number[], onlyUnique: boolean = true): number[] {
+    private getPairs(handPart: number[]): number[] {
         let unique = handPart.filter((x, i, a) => a.indexOf(x) == i)
         let pairs: number[] = []
         for (let tile of unique) {
             if (this.includesFrom(handPart, tile, tile)) {
-                pairs.push(tile)
-            }
-            //if 2222 considered as 22 and 22 pairs
-            if (!onlyUnique && this.includesFrom(handPart, tile, tile, tile, tile)) {
                 pairs.push(tile)
             }
         }

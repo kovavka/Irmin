@@ -7,7 +7,7 @@ import {SettingsStorage} from './SettingsStorage'
 import {Settings, SettingsType} from '../types/Settings'
 
 const REMEMBER_INTERVAL = 60
-const DROP_INTERVAL = 10
+const DROP_INTERVAL = 20
 
 export class StateService {
     private handService = new HandService()
@@ -88,7 +88,7 @@ export class StateService {
 
     private setFirstScreen(screen: ScreenType) {
         if (screen !== ScreenType.RULES && screen !== ScreenType.MEMORIZING) {
-            throw new Error()
+            throw new Error(`it's impossible to start game from ${ScreenType[screen]} screen`)
         }
 
         if (screen === ScreenType.RULES) {
