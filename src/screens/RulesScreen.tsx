@@ -19,19 +19,19 @@ export class RulesScreen extends React.Component {
              </div>
              <div className={'page-content'}>
                  <div className={'rules'}>
-                     You need to remember a hand for 1 min.
+                     You have one minute to remember a hand.
                      <br/><br/>
-                     Then you will see the hand as if it is your opponent hand — all tiles will be face down (except for the tsumo) and sorted in the reverse order:
+                     When you are ready, the hand is shown to you as if it is your opponent's hand — you see the back of the tiles and they are sorted in the reverse order:
                      <br/><br/>
                      Pei, Shaa, Nan, Ton, Chun, Hatsu, Haku, 9-1 sou, 9-1 pin, 9-1 man.
                      <br/><br/>
                      <ExampleHandVisual/>
                      <br/><br/>
-                     Each turn you will have only 10 seconds to choose the tile you want to discard (from your hand or tsumo). After the time, a tsumo will be thrown off.
+                     After each draw you have 20 seconds to discard a tile. When the time runs out, tsumo tile is discarded.
                      <br/><br/>
-                     Your goal is to complete a tempai. As soon as this happens press the tempai button and select the last tile to discard.
+                     Your goal is to complete tempai. When you believe you got tempai, press the "Tempai" button and select the last tile to discard.
                      <br/><br/>
-                     If your change your mind or make a mistake press the button to continue collecting hand.
+                     If you want to stop or you have made a mistake you cannot fix, press the "Give up" button - current hand state will be shown to you.
                  </div>
                  <div className={'flex-container flex-container--end'}>
                      <div className={'flat-btn flat-btn--green'}>

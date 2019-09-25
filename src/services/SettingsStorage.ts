@@ -1,5 +1,9 @@
 import {Settings, SettingsType} from '../types/Settings'
 
+const DEFAULT_USE_TIMER_VALUE = true
+const DEFAULT_INVERT_TILES_VALUE = true
+const DEFAULT_HIDE_TILES_VALUE = true
+
 export class SettingsStorage {
     // @ts-ignore
     private settings: Settings = {}
@@ -30,11 +34,19 @@ export class SettingsStorage {
         return this.settings
     }
 
+    getDefault(): Settings {
+       return <Settings>{
+            useTimer: DEFAULT_USE_TIMER_VALUE,
+            invertTiles: DEFAULT_INVERT_TILES_VALUE,
+            hideTiles: DEFAULT_HIDE_TILES_VALUE,
+        }
+    }
+
     private readSettings() {
         let hasVisited = this.getBoolValue('hasVisited', false)
-        let useTimer = this.getBoolValue('useTimer', true)
-        let invertTiles = this.getBoolValue('invertTiles', true)
-        let hideTiles = this.getBoolValue('hideTiles', true)
+        let useTimer = this.getBoolValue('useTimer', DEFAULT_USE_TIMER_VALUE)
+        let invertTiles = this.getBoolValue('invertTiles', DEFAULT_INVERT_TILES_VALUE)
+        let hideTiles = this.getBoolValue('hideTiles', DEFAULT_HIDE_TILES_VALUE)
 
         let defaultSettings = useTimer && invertTiles && hideTiles
         this.settings = <Settings>{

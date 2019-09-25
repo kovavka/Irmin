@@ -116,6 +116,10 @@ export class StateService {
         return this.settingsStorage.getSettings()
     }
 
+    getDefault(): Settings {
+        return this.settingsStorage.getDefault()
+    }
+
     get hideTiles(): boolean {
         return this.getSettings().hideTiles
     }

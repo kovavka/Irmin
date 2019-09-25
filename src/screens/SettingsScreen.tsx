@@ -19,18 +19,25 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
 
         let settings = this.stateService.getSettings()
         this.state = {
-            defaultSettings: settings.defaultSettings!,
-            useTimer: settings.useTimer!,
-            invertTiles: settings.invertTiles!,
-            hideTiles: settings.hideTiles!,
+            defaultSettings: settings.defaultSettings,
+            useTimer: settings.useTimer,
+            invertTiles: settings.invertTiles,
+            hideTiles: settings.hideTiles,
         }
     }
 
     onDefaultSettingsClick() {
-        let item = {
-            defaultSettings: !this.state.defaultSettings
+        let newValue = !this.state.defaultSettings
+        if (newValue) {
+            let settings =  this.stateService.getDefault()
+            settings.defaultSettings = newValue
+            this.setState(settings)
+            this.setValue(settings)
+        } else {
+            this.setState({
+                defaultSettings: newValue
+            })
         }
-        this.setState(item)
     }
 
     onUseTimerClick() {
