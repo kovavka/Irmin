@@ -1,6 +1,6 @@
 import {ScreenType} from "../types/ScreenType";
 import {HandService} from './HandService'
-import {Tile} from '../types/Tile'
+import {DiscardTile, Tile} from '../types/Tile'
 import signals from 'signals';
 import {TempaiService} from './TempaiService'
 import {SettingsStorage} from './SettingsStorage'
@@ -256,7 +256,7 @@ export class StateService {
         return '0' + count
     }
 
-    get discard(): Tile[] {
+    get discard(): DiscardTile[] {
         return this.handService.getDiscard()
     }
 

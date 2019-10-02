@@ -1,7 +1,8 @@
 import * as React from "react";
 import {Tile} from "../types/Tile";
 import {TileService} from "../services/TileService";
-import discardTile from '../img/tile-discard.svg'
+import discardTile from '../img/tile-fallen.svg'
+import hiddenFallenTile from '../img/tile-hidden-fallen.svg'
 import handTile from '../img/tile-hand.svg'
 import hiddenTile from '../img/tile-hidden.svg'
 import './tile.less';
@@ -10,7 +11,8 @@ import {StateService} from '../services/StateService'
 type TileVisualProps = {
     tile: Tile,
     isTsumo: boolean,
-    isOpen: boolean,
+    highlighted: boolean,
+    isFallen: boolean,
     selectable: boolean,
     hidden: boolean,
 }
@@ -56,22 +58,26 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
 
     render() {
      return (
-         <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '') + (this.props.isOpen ? ' tile--discard' : '')} onClick={() => this.onTileSelected()}>
+         <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '') + (this.props.isFallen ? ' tile--discard' : '')} onClick={() => this.onTileSelected()}>
+             {this.props.isFallen && this.props.highlighted && (
+                <div className='tile__mask'></div>
+             )}
              <div className={'tile__inner'}>
                  {this.state.isDropped && (
                      <div className={'tile__box'}></div>
                  )}
-                 {!this.state.isDropped && this.props.isOpen && (
+                 {!this.state.isDropped && this.props.isFallen && (
                      <img className={'tile__box tile__box--discard'} src={discardTile}/>
                  )}
-                 {!this.state.isDropped && !this.props.isOpen && this.props.hidden  && (
+
+                 {!this.state.isDropped && !this.props.isFallen && this.props.hidden  && (
                      <img className={'tile__box'} src={hiddenTile}/>
                  )}
-                 {!this.state.isDropped && !this.props.isOpen && !this.props.hidden  && (
+                 {!this.state.isDropped && !this.props.isFallen && !this.props.hidden  && (
                      <img className={'tile__box'} src={handTile}/>
                  )}
                  {!this.state.isDropped && !this.props.hidden  && (
-                     <img className={'tile__drawing' + (this.props.isOpen ? ' tile__drawing--discard' : ' tile__drawing--hand')}
+                     <img className={'tile__drawing' + (this.props.isFallen ? ' tile__drawing--discard' : ' tile__drawing--hand')}
                           src={TileService.getSvg(this.props.tile)}/>
                  )}
              </div>

@@ -5,7 +5,7 @@ import {Tile} from "../types/Tile";
 export class ExampleHandVisual extends React.Component {
     getTile(tile: Tile) {
         return (
-            <TileVisual tile={tile} isTsumo={false} isOpen={false} selectable={false} hidden={false}/>
+            <TileVisual tile={tile} isTsumo={false} highlighted={false} isFallen={false} selectable={false} hidden={false}/>
         )
     }
 

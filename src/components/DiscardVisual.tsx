@@ -1,11 +1,11 @@
 import * as React from "react";
 import {TileVisual} from "./TileVisual";
-import {Tile} from "../types/Tile";
-import discard from '../img/tile-discard.svg';
+import {DiscardTile} from "../types/Tile";
+import discard from '../img/tile-fallen.svg';
 import {StateService} from '../services/StateService'
 
 type DiscardState = {
-    tiles: Tile[]
+    tiles: DiscardTile[]
 }
 
 //todo add subscribe to StateChanged
@@ -49,9 +49,9 @@ export class DiscardVisual extends React.Component<any, DiscardState> {
         })
     }
 
-    getTile(tile: Tile) {
+    getTile(tile: DiscardTile) {
         return (
-            <TileVisual tile={tile} isTsumo={false} isOpen={true} selectable={false} hidden={false} />
+            <TileVisual tile={tile} isTsumo={false} highlighted={tile.tsumogiri} isFallen={true} selectable={false} hidden={false} />
         )
     }
 

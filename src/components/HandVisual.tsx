@@ -50,7 +50,8 @@ export class HandVisual extends React.Component<HandProps, HandState> {
         return (
             <TileVisual tile={tile}
                         isTsumo={false}
-                        isOpen={this.props.isOpenHand}
+                        highlighted={false}
+                        isFallen={this.props.isOpenHand}
                         selectable={this.props.selectable}
                         hidden={this.props.hiddenTiles}
             />
@@ -77,7 +78,8 @@ export class HandVisual extends React.Component<HandProps, HandState> {
                 <TileVisual
                     tile={this.state.tsumo}
                     isTsumo={true}
-                    isOpen={this.props.isOpenHand}
+                    highlighted={true}
+                    isFallen={this.props.isOpenHand}
                     selectable={this.props.selectable}
                     hidden={false}
                 />

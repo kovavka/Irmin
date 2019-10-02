@@ -1,10 +1,10 @@
-import {SuitType, Tile} from "../types/Tile";
+import {DiscardTile, SuitType, Tile} from '../types/Tile'
 import {WallGenerator} from "./WallGenerator";
 
 export class HandService {
     private wall: Tile[] = []
     private hand: Tile[] = []
-    private discard: Tile[] = []
+    private discard: DiscardTile[] = []
     private tsumo: Tile | undefined
     private sortTiles: boolean = false
 
@@ -34,7 +34,7 @@ export class HandService {
         return this.wall.length
     }
 
-    getDiscard(): Tile[] {
+    getDiscard(): DiscardTile[] {
         return this.discard.slice(0)
     }
 
@@ -78,7 +78,13 @@ export class HandService {
 
     dropTsumo(): Tile[] {
         if (this.tsumo) {
-            this.discard.push(this.tsumo)
+            let discardTile = <DiscardTile>{
+                suit: this.tsumo.suit,
+                value: this.tsumo.value,
+                tsumogiri: true,
+            }
+
+            this.discard.push(discardTile)
             this.tsumo = undefined
         }
 
@@ -88,7 +94,12 @@ export class HandService {
     dropFromHand(index: number): Tile[] {
         if (this.tsumo) {
             let tile = this.hand[index]
-            this.discard.push(tile)
+            let discardTile = <DiscardTile>{
+                suit: tile.suit,
+                value: tile.value,
+                tsumogiri: false,
+            }
+            this.discard.push(discardTile)
 
             this.hand.splice(index, 1)
             this.hand.unshift(this.tsumo)
@@ -104,11 +115,22 @@ export class HandService {
         if (this.tsumo) {
             if (this.tsumo.suit === tile.suit && this.tsumo.value === tile.value) {
                 this.tsumo = undefined
-                this.discard.push(tile)
+
+                let discardTile = <DiscardTile>{
+                    suit: tile.suit,
+                    value: tile.value,
+                    tsumogiri: true,
+                }
+                this.discard.push(discardTile)
             } else {
                 let index = this.hand.findIndex(x => x.suit == tile.suit && x.value == tile.value)
                 if (index !== -1) {
-                    this.discard.push(tile)
+                    let discardTile = <DiscardTile>{
+                        suit: tile.suit,
+                        value: tile.value,
+                        tsumogiri: false,
+                    }
+                    this.discard.push(discardTile)
 
                     this.hand.splice(index, 1)
                     this.hand.unshift(this.tsumo)

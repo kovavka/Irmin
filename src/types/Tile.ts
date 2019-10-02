@@ -3,6 +3,12 @@ export interface Tile {
     value: number
 }
 
+export interface DiscardTile {
+    suit: SuitType
+    value: number
+    tsumogiri: boolean
+}
+
 export enum SuitType {
     MANZU,
     PINZU,
