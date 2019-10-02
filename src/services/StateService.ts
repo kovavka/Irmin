@@ -51,7 +51,7 @@ export class StateService {
                     this.setScreen(this.previousScreen)
                     this.previousScreen = undefined
                 } else {
-                    this.handService.generate()
+                    this.generateHand()
                     this.setScreen(ScreenType.MEMORIZING)
                 }
                 break
@@ -63,11 +63,11 @@ export class StateService {
                 this.setScreen(ScreenType.FAIL)
                 break
             case ScreenType.FAIL:
-                this.handService.generate()
+                this.generateHand()
                 this.setScreen(ScreenType.MEMORIZING)
                 break
             case ScreenType.SUCCESS:
-                this.handService.generate()
+                this.generateHand()
                 this.setScreen(ScreenType.MEMORIZING)
                 break
             case ScreenType.ABOUT:
@@ -75,15 +75,19 @@ export class StateService {
                     this.setScreen(this.previousScreen)
                     this.previousScreen = undefined
                 } else {
-                    this.handService.generate()
+                    this.generateHand()
                     this.setScreen(ScreenType.MEMORIZING)
                 }
                 break
             case ScreenType.SETTINGS:
-                this.handService.generate()
+                this.generateHand()
                 this.setScreen(ScreenType.MEMORIZING)
                 break
         }
+    }
+
+    private generateHand() {
+        this.handService.generate(this.getSettings().sortTiles)
     }
 
     private setFirstScreen(screen: ScreenType) {
@@ -95,7 +99,7 @@ export class StateService {
             this._currentScreen = ScreenType.RULES
         } else {
             this._currentScreen = ScreenType.MEMORIZING
-            this.handService.generate()
+            this.generateHand()
         }
 
         this.initialized = true

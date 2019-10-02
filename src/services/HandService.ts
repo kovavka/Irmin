@@ -6,11 +6,15 @@ export class HandService {
     private hand: Tile[] = []
     private discard: Tile[] = []
     private tsumo: Tile | undefined
+    private sortTiles: boolean = false
 
-    generate(): Tile[]  {
+    generate(sortTiles: boolean): Tile[]  {
+        this.sortTiles = sortTiles
         let wall = WallGenerator.generate()
 
-        this.hand = wall.slice(0,13).sort(this.sortHandler)
+        this.hand = wall.slice(0,13)
+        this.trySortHand()
+
         this.wall = wall.slice(13)
         this.discard = []
         this.tsumo = undefined
@@ -39,24 +43,25 @@ export class HandService {
     }
 
     getStr(): string {
+        let sorted = this.hand.slice(0).sort(this.sortHandler)
         let hand = ''
 
-        let man = this.hand.filter(x => x.suit === SuitType.MANZU)
+        let man = sorted.filter(x => x.suit === SuitType.MANZU)
         if (man.length) {
             hand += man.map(x => x.value).join('') + 'm'
         }
 
-        let pin = this.hand.filter(x => x.suit === SuitType.PINZU)
+        let pin = sorted.filter(x => x.suit === SuitType.PINZU)
         if (pin.length) {
             hand += pin.map(x => x.value).join('') + 'p'
         }
 
-        let sou = this.hand.filter(x => x.suit === SuitType.SOUZU)
+        let sou = sorted.filter(x => x.suit === SuitType.SOUZU)
         if (sou.length) {
             hand += sou.map(x => x.value).join('') + 's'
         }
 
-        let honors = this.hand.filter(x => x.suit === SuitType.JIHAI)
+        let honors = sorted.filter(x => x.suit === SuitType.JIHAI)
         if (honors.length) {
             hand += honors.map(x => x.value).join('') + 'z'
         }
@@ -86,8 +91,8 @@ export class HandService {
             this.discard.push(tile)
 
             this.hand.splice(index, 1)
-            this.hand.push(this.tsumo)
-            this.hand = this.hand.sort(this.sortHandler)
+            this.hand.unshift(this.tsumo)
+            this.trySortHand()
 
             this.tsumo = undefined
         }
@@ -106,8 +111,8 @@ export class HandService {
                     this.discard.push(tile)
 
                     this.hand.splice(index, 1)
-                    this.hand.push(this.tsumo)
-                    this.hand = this.hand.sort(this.sortHandler)
+                    this.hand.unshift(this.tsumo)
+                    this.trySortHand()
 
                     this.tsumo = undefined
                 }
@@ -115,6 +120,12 @@ export class HandService {
         }
 
         return this.getHand()
+    }
+
+    private trySortHand() {
+        if (this.sortTiles) {
+            this.hand.sort(this.sortHandler)
+        }
     }
 
     private sortHandler(a: Tile, b: Tile) {

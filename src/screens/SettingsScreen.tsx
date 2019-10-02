@@ -7,6 +7,7 @@ import {SettingsType} from '../types/Settings'
 type SettingsScreenState = {
     defaultSettings: boolean
     useTimer: boolean
+    sortTiles: boolean
     invertTiles: boolean
     hideTiles: boolean
 }
@@ -21,6 +22,7 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
         this.state = {
             defaultSettings: settings.defaultSettings,
             useTimer: settings.useTimer,
+            sortTiles: settings.sortTiles,
             invertTiles: settings.invertTiles,
             hideTiles: settings.hideTiles,
         }
@@ -44,6 +46,16 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
         if (!this.state.defaultSettings) {
             let item = {
                 useTimer: !this.state.useTimer
+            }
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    onSortTilesClick() {
+        if (!this.state.defaultSettings) {
+            let item = {
+                sortTiles: !this.state.sortTiles
             }
             this.setState(item)
             this.setValue(item)
@@ -75,7 +87,7 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
     }
 
     render() {
-        const {defaultSettings, useTimer, invertTiles, hideTiles} = this.state
+        const {defaultSettings, useTimer, sortTiles, invertTiles, hideTiles} = this.state
         return (
             <div className='rules'>
                 <div className='page-header'>
@@ -98,6 +110,13 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
                                 onToggle={() => this.onUseTimerClick()}
                             />
                             <div>Use timer</div>
+                        </div>
+                        <div className='flex-container flex-container--margin-m'>
+                            <Switch
+                                switched={sortTiles}
+                                onToggle={() => this.onSortTilesClick()}
+                            />
+                            <div>Sort tiles</div>
                         </div>
                         <div className='flex-container flex-container--margin-m'>
                             <Switch
