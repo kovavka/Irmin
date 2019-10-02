@@ -7,6 +7,8 @@ import {SettingsType} from '../types/Settings'
 type SettingsScreenState = {
     defaultSettings: boolean
     useTimer: boolean
+    rememberTime: number
+    dropTime: number
     sortTiles: boolean
     invertTiles: boolean
     hideTiles: boolean
@@ -22,6 +24,8 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
         this.state = {
             defaultSettings: settings.defaultSettings,
             useTimer: settings.useTimer,
+            rememberTime: settings.rememberTime,
+            dropTime: settings.dropTime,
             sortTiles: settings.sortTiles,
             invertTiles: settings.invertTiles,
             hideTiles: settings.hideTiles,
@@ -82,6 +86,32 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
         }
     }
 
+    rememberTimeChange(event: any) {
+        if (this.state.useTimer && this.isValidTime(event)) {
+            let item = {
+                rememberTime: event.target.value
+            }
+
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    dropTimeChange(event: any) {
+        if (this.state.useTimer && this.isValidTime(event)) {
+            let item = {
+                dropTime: event.target.value
+            }
+
+            this.setState(item)
+            this.setValue(item)
+        }
+    }
+
+    private isValidTime(event: any) {
+        return event.target.validity.valid
+    }
+
     private setValue(settings: SettingsType) {
         this.stateService.setSettings(settings)
     }
@@ -111,6 +141,17 @@ export class SettingsScreen extends React.Component<any, SettingsScreenState> {
                             />
                             <div>Use timer</div>
                         </div>
+                        <div className={'settings__options' + (!useTimer ? ' settings__options--disabled' : '')}>
+                            <div className='flex-container flex-container--margin-m'>
+                                <input type="text" pattern="[0-9]{1,3}" onInput={(value) => this.rememberTimeChange(value)} value={this.state.rememberTime} />
+                                <div>Time to remember the hand</div>
+                            </div>
+                            <div className='flex-container flex-container--margin-m'>
+                                <input type="text" pattern="[0-9]{1,3}" onInput={(value) => this.dropTimeChange(value)} value={this.state.dropTime} />
+                                <div>Time to choose discard</div>
+                            </div>
+                        </div>
+
                         <div className='flex-container flex-container--margin-m'>
                             <Switch
                                 switched={sortTiles}

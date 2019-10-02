@@ -6,9 +6,6 @@ import {TempaiService} from './TempaiService'
 import {SettingsStorage} from './SettingsStorage'
 import {Settings, SettingsType} from '../types/Settings'
 
-const REMEMBER_INTERVAL = 60
-const DROP_INTERVAL = 20
-
 export class StateService {
     private handService = new HandService()
     private tempaiService = new TempaiService()
@@ -139,10 +136,10 @@ export class StateService {
             this.clearTimer()
 
             if (this._currentScreen === ScreenType.MEMORIZING) {
-                this._remainingTime = REMEMBER_INTERVAL
+                this._remainingTime = this.getSettings().rememberTime
             }
             if (this._currentScreen === ScreenType.PROCESSING) {
-                this._remainingTime = DROP_INTERVAL
+                this._remainingTime = this.getSettings().dropTime
             }
 
             this.onTimeChanged.dispatch()
