@@ -78,7 +78,7 @@ export class HandVisual extends React.Component<HandProps, HandState> {
                 <TileVisual
                     tile={this.state.tsumo}
                     isTsumo={true}
-                    highlighted={true}
+                    highlighted={false}
                     isFallen={this.props.isOpenHand}
                     selectable={this.props.selectable}
                     hidden={false}

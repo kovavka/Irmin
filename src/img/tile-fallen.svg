@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="370">
-<!--  <rect width="300" height="200" y="170" ry="40" fill="#000"/>-->
-  <rect width="300" height="200" y="170" ry="40" fill="#ffab2d"/>
-  <rect width="300" height="200" y="150" ry="40" fill="#c1c1c1"/>
-  <rect width="300" height="300" y="0" ry="40" fill="#fff"/>
+  <rect width="300" height="200" y="170" ry="40" fill="#ffab2d" style="fill: var(--tile-back-color)"/>
+  <rect width="300" height="200" y="150" ry="40" fill="#c1c1c1" style="fill: var(--secondary-dark-color)"/>
+  <rect width="300" height="300" y="0" ry="40" fill="#fff" style="fill: var(--secondary-color)"/>
 </svg>

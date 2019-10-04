@@ -54,14 +54,15 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
 
     render() {
      return (
-         <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '') + (this.props.isFallen ? ' tile--discard' : '')} onClick={() => this.onTileSelected()}>
+         <div className={`tile ${this.props.isTsumo ? ' tile--tsumo' : ''} ${this.props.isFallen ? ' tile--discard' : ''} ${this.props.highlighted ? ' tile--highlighted' : ''}`}
+              onClick={() => this.onTileSelected()}>
              <div className={'tile__inner'}>
                  {this.state.isDropped && (
                      <div className={'tile__box'}></div>
                  )}
                  {!this.state.isDropped && this.props.isFallen && (
                      <svg viewBox={'0 0 300 370'} className='tile__box tile__box--discard'>
-                         <use xlinkHref='#tile-discard'></use>
+                         <use xlinkHref='#tile-fallen'></use>
                      </svg>
                  )}
                  {!this.state.isDropped && !this.props.isFallen && this.props.hidden  && (
