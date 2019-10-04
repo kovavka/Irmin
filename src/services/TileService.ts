@@ -16,14 +16,14 @@ export class TileService {
 
     private static getManTile(value: number) {
         if (value > 0 && value < 10) {
-            return require(`../img/man${value}.svg`)
+            return `man${value}`
         }
         throw new Error(`${value} is incorrect value for man suit`)
     }
 
     private static getPinTile(value: number) {
         if (value > 0 && value < 10) {
-            return require(`../img/pin${value}.svg`)
+            return `pin${value}`
         }
         throw new Error(`${value} is incorrect value for pin suit`)
     }
@@ -31,7 +31,7 @@ export class TileService {
 
     private static getSouTile(value: number) {
         if (value > 0 && value < 10) {
-            return require(`../img/sou${value}.svg`)
+            return `sou${value}`
         }
         throw new Error(`${value} is incorrect value for sou suit`)
     }
@@ -39,19 +39,19 @@ export class TileService {
     private static getJihaiTile(value: number) {
         switch (value) {
             case 1:
-                return require(`../img/jihaiHaku.svg`)
+                return 'jihaiHaku'
             case 2:
-                return require(`../img/jihaiHatsu.svg`)
+                return 'jihaiHatsu'
             case 3:
-                return require(`../img/jihaiChun.svg`)
+                return 'jihaiChun'
             case 4:
-                return require(`../img/jihaiTon.svg`)
+                return 'jihaiTon'
             case 5:
-                return require(`../img/jihaiNan.svg`)
+                return 'jihaiNan'
             case 6:
-                return require(`../img/jihaiShaa.svg`)
+                return 'jihaiShaa'
             case 7:
-                return require(`../img/jihaiPei.svg`)
+                return 'jihaiPei'
             default:
                 throw new Error(`${value} is incorrect value for jihai suit`)
         }

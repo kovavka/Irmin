@@ -1,10 +1,6 @@
 import * as React from "react";
 import {Tile} from "../types/Tile";
 import {TileService} from "../services/TileService";
-import discardTile from '../img/tile-fallen.svg'
-import hiddenFallenTile from '../img/tile-hidden-fallen.svg'
-import handTile from '../img/tile-hand.svg'
-import hiddenTile from '../img/tile-hidden.svg'
 import './tile.less';
 import {StateService} from '../services/StateService'
 
@@ -59,26 +55,30 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
     render() {
      return (
          <div className={'tile' + (this.props.isTsumo ? ' tile--tsumo' : '') + (this.props.isFallen ? ' tile--discard' : '')} onClick={() => this.onTileSelected()}>
-             {this.props.isFallen && this.props.highlighted && (
-                <div className='tile__mask'></div>
-             )}
              <div className={'tile__inner'}>
                  {this.state.isDropped && (
                      <div className={'tile__box'}></div>
                  )}
                  {!this.state.isDropped && this.props.isFallen && (
-                     <img className={'tile__box tile__box--discard'} src={discardTile}/>
+                     <svg viewBox={'0 0 300 370'} className='tile__box tile__box--discard'>
+                         <use xlinkHref='#tile-discard'></use>
+                     </svg>
                  )}
-
                  {!this.state.isDropped && !this.props.isFallen && this.props.hidden  && (
-                     <img className={'tile__box'} src={hiddenTile}/>
+                     <svg viewBox={'0 0 300 470'} className='tile__box'>
+                         <use xlinkHref='#tile-hidden'></use>
+                     </svg>
                  )}
                  {!this.state.isDropped && !this.props.isFallen && !this.props.hidden  && (
-                     <img className={'tile__box'} src={handTile}/>
+                     <svg viewBox={'0 0 300 470'} className='tile__box'>
+                        <use xlinkHref='#tile-hand'></use>
+                     </svg>
                  )}
                  {!this.state.isDropped && !this.props.hidden  && (
-                     <img className={'tile__drawing' + (this.props.isFallen ? ' tile__drawing--discard' : ' tile__drawing--hand')}
-                          src={TileService.getSvg(this.props.tile)}/>
+                     <svg viewBox={'0 0 300 400'}
+                         className={'tile__drawing' + (this.props.isFallen ? ' tile__drawing--discard' : ' tile__drawing--hand')}>
+                         <use xlinkHref={`#${TileService.getSvg(this.props.tile)}`}></use>
+                     </svg>
                  )}
              </div>
          </div>
