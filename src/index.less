@@ -46,6 +46,7 @@ input {
 }
 
 .hand {
+  position: relative;
   display: flex;
 
   &.hand--example {
@@ -63,6 +64,18 @@ input {
       opacity: 0.8;
       cursor: pointer;
     }
+  }
+}
+
+.kan {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  align-items: end;
+  justify-content: flex-end;
+
+  .tile {
+    width: calc((100% - 2vw - 28px) / 14) !important;
   }
 }
 

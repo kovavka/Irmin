@@ -256,6 +256,10 @@ export class StateService {
         return this.handService.getTsumo()
     }
 
+    get kanTiles(): Tile[] {
+        return this.handService.getKanTiles()
+    }
+
     get remainingTiles(): string {
         let count = this.handService.remainingTiles
         if (count > 9) {

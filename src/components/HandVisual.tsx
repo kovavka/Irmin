@@ -5,6 +5,7 @@ import {StateService} from '../services/StateService'
 
 type HandState = {
     tiles: Tile[]
+    kanTiles: Tile[]
     tsumo: Tile | undefined
 }
 
@@ -23,6 +24,7 @@ export class HandVisual extends React.Component<HandProps, HandState> {
 
         this.state = {
             tiles: this.props.reverse ? this.stateService.hand.reverse() : this.stateService.hand,
+            kanTiles: this.stateService.kanTiles,
             tsumo: this.stateService.tsumo,
         }
     }
@@ -46,6 +48,19 @@ export class HandVisual extends React.Component<HandProps, HandState> {
         return this.state.tiles.map(this.getTile.bind(this))
     }
 
+    getKans() {
+        return this.state.kanTiles.map(tile =>
+            (
+                <div className='kan'>
+                    {this.getKanTile(tile)}
+                    {this.getKanTile(tile)}
+                    {this.getKanTile(tile)}
+                    {this.getKanTile(tile)}
+                </div>
+            )
+        )
+    }
+
     getTile(tile: Tile, index: number) {
         return (
             <TileVisual tile={tile}
@@ -54,6 +69,18 @@ export class HandVisual extends React.Component<HandProps, HandState> {
                         highlighted={false}
                         isFallen={this.props.isOpenHand}
                         selectable={this.props.selectable}
+                        hidden={this.props.hiddenTiles}
+            />
+        )
+    }
+
+    getKanTile(tile: Tile) {
+        return (
+            <TileVisual tile={tile}
+                        isTsumo={false}
+                        highlighted={false}
+                        isFallen={true}
+                        selectable={false}
                         hidden={this.props.hiddenTiles}
             />
         )
@@ -74,20 +101,21 @@ export class HandVisual extends React.Component<HandProps, HandState> {
 
     render() {
      return (
-         <div className={this.getClassName()}>
-            {this.state.tsumo && (
-                <TileVisual
-                    tile={this.state.tsumo}
-                    isTsumo={true}
-                    index={-1}
-                    highlighted={false}
-                    isFallen={this.props.isOpenHand}
-                    selectable={this.props.selectable}
-                    hidden={false}
-                />
-            )}
-             {this.getHand()}
-         </div>
+             <div className={this.getClassName()}>
+                {this.state.tsumo && (
+                    <TileVisual
+                        tile={this.state.tsumo}
+                        isTsumo={true}
+                        index={-1}
+                        highlighted={false}
+                        isFallen={this.props.isOpenHand}
+                        selectable={this.props.selectable}
+                        hidden={false}
+                    />
+                )}
+                 {this.getHand()}
+                 {this.getKans()}
+             </div>
      )
     }
 }

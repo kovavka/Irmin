@@ -6,6 +6,7 @@ export class HandService {
     private hand: Tile[] = []
     private discard: DiscardTile[] = []
     private tsumo: Tile | undefined
+    private kanTiles: Tile[] = []
     private sortTiles: boolean = false
 
     generate(sortTiles: boolean): Tile[]  {
@@ -19,6 +20,13 @@ export class HandService {
         this.discard = []
         this.tsumo = undefined
 
+
+        this.hand = this.hand.slice(4)
+        this.kanTiles = [{
+            suit: 2,
+            value: 1,
+        }]
+
         return this.getHand()
     }
 
@@ -28,6 +36,10 @@ export class HandService {
 
     getTsumo(): Tile | undefined {
         return this.tsumo
+    }
+
+    getKanTiles(): Tile[] {
+        return this.kanTiles.slice(0)
     }
 
     get remainingTiles(): number {
