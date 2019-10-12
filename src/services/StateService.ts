@@ -158,7 +158,7 @@ export class StateService {
                 this.nextScreen()
             } else if (this._currentScreen === ScreenType.PROCESSING) {
                 if (this.tsumo) {
-                    this.dropTile(this.tsumo)
+                    this.dropTile(-1)
                 }
                 this.chooseTempai(false)
             }
@@ -179,11 +179,11 @@ export class StateService {
         this._remainingTime = 0
     }
 
-    selectTile(tile: Tile) {
+    selectTile(index: number) {
         if (!this._chooseTempai) {
-            this.dropTile(tile)
+            this.dropTileWithTimeout(index)
         } else {
-            this.handService.dropTile(tile)
+            this.dropTile(index)
             this.checkTempai()
         }
     }
@@ -197,8 +197,9 @@ export class StateService {
         }
     }
 
-    dropTile(tile: Tile) {
-        this.handService.dropTile(tile)
+    private dropTileWithTimeout(index: number) {
+        this.dropTile(index)
+
         setTimeout(() => {
             if (this.handService.hasTiles) {
                 this.handService.nextTile()
@@ -209,14 +210,22 @@ export class StateService {
                 this.setScreen(ScreenType.FAIL)
             }
         }, 200)
+    }
 
+
+
+    private dropTile(index: number) {
+        if (index === -1) {
+            this.handService.dropTsumo()
+        } else {
+            this.handService.dropFromHand(index)
+        }
     }
 
     chooseTempai(value: boolean) {
         this._chooseTempai = value
         this.onChooseTempaiChanged.dispatch(value)
     }
-
 
     openRules() {
         this.clearTimer()

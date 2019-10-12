@@ -5,6 +5,7 @@ import './tile.less';
 import {StateService} from '../services/StateService'
 
 type TileVisualProps = {
+    index?: number,
     tile: Tile,
     isTsumo: boolean,
     highlighted: boolean,
@@ -42,13 +43,13 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
     }
 
     onTileSelected() {
-        if (this.props.selectable) {
+        if (this.props.selectable && this.props.index) {
             //todo not a great solution for discard visualisation
             this.setState({
                 isDropped: true,
             })
 
-            this.stateService.selectTile(this.props.tile)
+            this.stateService.selectTile(this.props.index)
         }
     }
 

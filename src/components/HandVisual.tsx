@@ -46,9 +46,10 @@ export class HandVisual extends React.Component<HandProps, HandState> {
         return this.state.tiles.map(this.getTile.bind(this))
     }
 
-    getTile(tile: Tile) {
+    getTile(tile: Tile, index: number) {
         return (
             <TileVisual tile={tile}
+                        index={index}
                         isTsumo={false}
                         highlighted={false}
                         isFallen={this.props.isOpenHand}
@@ -78,6 +79,7 @@ export class HandVisual extends React.Component<HandProps, HandState> {
                 <TileVisual
                     tile={this.state.tsumo}
                     isTsumo={true}
+                    index={-1}
                     highlighted={false}
                     isFallen={this.props.isOpenHand}
                     selectable={this.props.selectable}

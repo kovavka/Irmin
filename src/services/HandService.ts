@@ -111,39 +111,6 @@ export class HandService {
         return this.getHand()
     }
 
-    dropTile(tile: Tile): Tile[] {
-        if (this.tsumo) {
-            if (this.tsumo.suit === tile.suit && this.tsumo.value === tile.value) {
-                this.tsumo = undefined
-
-                let discardTile = <DiscardTile>{
-                    suit: tile.suit,
-                    value: tile.value,
-                    tsumogiri: true,
-                }
-                this.discard.push(discardTile)
-            } else {
-                let index = this.hand.findIndex(x => x.suit == tile.suit && x.value == tile.value)
-                if (index !== -1) {
-                    let discardTile = <DiscardTile>{
-                        suit: tile.suit,
-                        value: tile.value,
-                        tsumogiri: false,
-                    }
-                    this.discard.push(discardTile)
-
-                    this.hand.splice(index, 1)
-                    this.hand.unshift(this.tsumo)
-                    this.trySortHand()
-
-                    this.tsumo = undefined
-                }
-            }
-        }
-
-        return this.getHand()
-    }
-
     private trySortHand() {
         if (this.sortTiles) {
             this.hand.sort(this.sortHandler)
