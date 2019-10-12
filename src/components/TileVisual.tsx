@@ -43,7 +43,7 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
     }
 
     onTileSelected() {
-        if (this.props.selectable && this.props.index) {
+        if (this.props.selectable && this.props.index !== undefined) {
             //todo not a great solution for discard visualisation
             this.setState({
                 isDropped: true,
