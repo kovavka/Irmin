@@ -52,9 +52,9 @@ export class HandVisual extends React.Component<HandProps, HandState> {
     getKans() {
         return (
             <div className='kan'>
-                {this.getAllKanTiles().map(tile =>
+                {this.getAllKanTiles().map((tile, i) =>
                     (
-                        this.getKanTile(tile)
+                        this.getKanTile(tile, this.props.hiddenTiles || i % 4 === 0 || i % 4 === 3)
                     )
                 )}
             </div>
@@ -93,14 +93,14 @@ export class HandVisual extends React.Component<HandProps, HandState> {
         )
     }
 
-    getKanTile(tile: Tile) {
+    getKanTile(tile: Tile, hidden: boolean) {
         return (
             <TileVisual tile={tile}
                         isTsumo={false}
                         highlighted={false}
                         isFallen={true}
                         selectable={false}
-                        hidden={this.props.hiddenTiles}
+                        hidden={hidden}
             />
         )
     }

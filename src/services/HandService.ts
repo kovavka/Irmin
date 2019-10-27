@@ -133,7 +133,7 @@ export class HandService {
             return false
         }
 
-        this.kanTiles.push(tile)
+        this.kanTiles.unshift(tile)
         this.hand = allTiles.filter(x => x.value !== tile.value || x.suit !== tile.suit)
 
         this.tsumo = this.deadWall[0]
