@@ -253,7 +253,11 @@ export class StateService {
         if (index === -1) {
             this.handService.dropTsumo()
         } else {
-            this.handService.dropFromHand(index)
+            let correctIndex = this.invertTiles
+                ? this.handService.getHand().length - index - 1
+                : index
+
+            this.handService.dropFromHand(correctIndex)
         }
     }
 

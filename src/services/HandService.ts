@@ -19,7 +19,6 @@ export class HandService {
 
         this.wall = wall.slice(13, 30)
         this.deadWall = wall.slice(30)
-        console.log(this.deadWall.length)
         this.discard = []
         this.kanTiles = []
         this.tsumo = undefined
