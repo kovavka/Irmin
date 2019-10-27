@@ -68,6 +68,7 @@ input {
 }
 
 .kan {
+  z-index: 0;
   display: flex;
   position: absolute;
   bottom: 0;
@@ -75,7 +76,11 @@ input {
   justify-content: flex-end;
 
   .tile {
-    width: calc((100% - 2vw - 28px) / 14) !important;
+    width: calc((90% - 2vw - 28px) / 14) !important;
+
+    &:nth-child(4n + 1) {
+      margin-left: 16px
+    }
   }
 }
 

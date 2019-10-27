@@ -157,9 +157,21 @@ export class StateService {
             if (this._currentScreen === ScreenType.MEMORIZING) {
                 this.nextScreen()
             } else if (this._currentScreen === ScreenType.PROCESSING) {
-                if (this.tsumo) {
-                    this.dropTile(-1)
+                if (!this.tsumo) {
+                    throw new Error('has no tsumo to discard')
                 }
+
+                this.dropTile(-1)
+
+                if (this.handService.hasTiles) {
+                    this.handService.nextTile()
+
+                    this.onHandChanged.dispatch()
+                    this.setTimer()
+                } else {
+                    this.setScreen(ScreenType.FAIL)
+                }
+
                 this.chooseTempai(false)
             }
         }
@@ -211,8 +223,6 @@ export class StateService {
             }
         }, 200)
     }
-
-
 
     private dropTile(index: number) {
         if (index === -1) {

@@ -49,16 +49,34 @@ export class HandVisual extends React.Component<HandProps, HandState> {
     }
 
     getKans() {
-        return this.state.kanTiles.map(tile =>
-            (
-                <div className='kan'>
-                    {this.getKanTile(tile)}
-                    {this.getKanTile(tile)}
-                    {this.getKanTile(tile)}
-                    {this.getKanTile(tile)}
-                </div>
-            )
+        return (
+            <div className='kan'>
+                {this.getAllKanTiles().map(tile =>
+                    (
+                        this.getKanTile(tile)
+                    )
+                )}
+            </div>
         )
+    }
+
+    private getAllKanTiles(): Tile[] {
+        if (this.state.kanTiles.length === 1) {
+            let tile = this.state.kanTiles[0]
+            return [tile, tile, tile, tile]
+        }
+        // @ts-ignore
+        return this.state.kanTiles.reduce((a, b) => {
+            let array = Array.isArray(a)
+                ? (a as Tile[])
+                : [a ,a ,a ,a]
+
+            array.push(b)
+            array.push(b)
+            array.push(b)
+            array.push(b)
+            return array
+        })
     }
 
     getTile(tile: Tile, index: number) {
