@@ -38,6 +38,45 @@ export class HandService {
         return this.kanTiles.slice(0)
     }
 
+    //for sdk
+    getWall(): Tile[] {
+        return this.wall.slice(0)
+    }
+
+    //for sdk
+    getGroups() {
+        let allTiles =  this.wall.concat(this.getHand())
+        if (this.tsumo) {
+            allTiles = allTiles.concat(this.tsumo)
+        }
+
+        return allTiles.reduce((a: any, b)=> {
+            let key = `${b.value}${this.getSuitStr(b.suit)}`
+
+            if (a[key]) {
+                a[key]++
+
+            } else {
+                a[key] = 1
+            }
+
+            return a
+        }, {})
+    }
+
+    private getSuitStr(suit: SuitType) {
+        switch (suit) {
+            case SuitType.MANZU:
+                return 'm'
+            case SuitType.PINZU:
+                return 'p'
+            case SuitType.SOUZU:
+                return 's'
+            case SuitType.JIHAI:
+                return 'z'
+        }
+    }
+
     get remainingTiles(): number {
         return this.wall.length
     }
