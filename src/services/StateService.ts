@@ -197,6 +197,7 @@ export class StateService {
     }
 
     selectTile(index: number) {
+        index = this.tryInvertIndex(index)
         switch (this.processingState) {
             case ProcessingState.IDLE:
                 throw new Error('cannot select tile, incorrect processing state')
@@ -253,12 +254,14 @@ export class StateService {
         if (index === -1) {
             this.handService.dropTsumo()
         } else {
-            let correctIndex = this.invertTiles
-                ? this.handService.getHand().length - index - 1
-                : index
-
-            this.handService.dropFromHand(correctIndex)
+            this.handService.dropFromHand(index)
         }
+    }
+
+    private tryInvertIndex(index: number) {
+        return this.invertTiles
+            ? this.handService.getHand().length - index - 1
+            : index
     }
 
     chooseTempaiClicked() {
