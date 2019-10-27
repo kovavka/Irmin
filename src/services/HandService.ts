@@ -20,13 +20,6 @@ export class HandService {
         this.discard = []
         this.tsumo = undefined
 
-
-        this.hand = this.hand.slice(4)
-        this.kanTiles = [{
-            suit: 2,
-            value: 1,
-        }]
-
         return this.getHand()
     }
 

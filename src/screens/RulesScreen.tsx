@@ -32,6 +32,9 @@ export class RulesScreen extends React.Component {
                      Your goal is to complete tempai. When you believe you got tempai, press the "Tempai" button and select the last tile to discard.
                      <br/><br/>
                      If you want to stop or you have made a mistake you cannot fix, press the "Give up" button - current hand state will be shown to you.
+                     <br/><br/>
+                     Also you can disable inversion, hiding and other preferences
+                     in <a onClick={() => this.stateService.openSettings()}>settings</a>.
                  </div>
                  <div className={'flex-container flex-container--end'}>
                      <div className={'flat-btn flat-btn--green'}>

@@ -132,7 +132,7 @@ export class HandVisual extends React.Component<HandProps, HandState> {
                     />
                 )}
                  {this.getHand()}
-                 {this.getKans()}
+                 {this.state.kanTiles.length !== 0 && this.getKans()}
              </div>
      )
     }
