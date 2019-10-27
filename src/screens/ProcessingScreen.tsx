@@ -3,12 +3,13 @@ import {HandVisual} from '../components/HandVisual'
 import {DiscardVisual} from '../components/DiscardVisual'
 import {StateService} from '../services/StateService'
 import {Footer} from '../components/Footer'
+import {ProcessingState} from "../types/ProcessingState";
 
 type ProcessingScreenState = {
     hideTiles: boolean
     useTimer: boolean
     invertTiles: boolean
-    choose: boolean
+    processingState: ProcessingState
     remainingTime: string
     remainingTiles: string
 }
@@ -22,8 +23,8 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         this.state = {
             hideTiles: this.stateService.hideTiles,
             useTimer: this.stateService.useTimer,
-            invertTiles:  this.stateService.invertTiles,
-            choose: false,
+            invertTiles: this.stateService.invertTiles,
+            processingState: ProcessingState.PROCESSING,
             remainingTime: '0',
             remainingTiles: this.stateService.remainingTiles,
         }
@@ -32,13 +33,13 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     componentDidMount(): void {
         this.stateService.onTimeChanged.add(this.onTimeChanged, this)
         this.stateService.setTimer()
-        this.stateService.onChooseTempaiChanged.add(this.onChooseTempaiChanged, this)
+        this.stateService.onProcessingStateChanged.add(this.onProcessingStateChanged, this)
         this.stateService.onHandChanged.add(this.onHandChanged, this)
     }
 
     componentWillUnmount(): void {
         this.stateService.onTimeChanged.remove(this.onTimeChanged, this)
-        this.stateService.onChooseTempaiChanged.remove(this.onChooseTempaiChanged, this)
+        this.stateService.onProcessingStateChanged.remove(this.onProcessingStateChanged, this)
         this.stateService.onHandChanged.remove(this.onHandChanged, this)
     }
 
@@ -48,9 +49,9 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
         })
     }
 
-    onChooseTempaiChanged(value: boolean) {
+    onProcessingStateChanged(processingState: ProcessingState) {
         this.setState({
-            choose: value
+            processingState: processingState
         })
     }
 
@@ -61,7 +62,11 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     onTempaiClick() {
-        this.stateService.chooseTempai(!this.state.choose)
+        this.stateService.chooseTempaiClicked()
+    }
+
+    onKanClick() {
+        this.stateService.chooseKanClicked()
     }
 
     onGiveUpClick() {
@@ -69,28 +74,36 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     render() {
-        const {hideTiles, useTimer, invertTiles, choose, remainingTime, remainingTiles} = this.state
+        const {hideTiles, useTimer, invertTiles, processingState, remainingTime, remainingTiles} = this.state
         return (
             <div>
                 <div className={'page-header'}>
                     <div className={'page-header__title'}>
-                        {!choose && (
+                        {processingState === ProcessingState.PROCESSING && (
                             'Drop a tile'
                         )}
-                        {choose && (
+                        {processingState === ProcessingState.CHOOSE_TEMPAI && (
                             'Select tempai'
+                        )}
+                        {processingState === ProcessingState.CHOOSE_KAN && (
+                            'Select kan'
                         )}
                     </div>
                 </div>
-                <div className={'page-content'}>
+                <div className='page-content'>
                     <div className={'flex-container' + (useTimer ? ' flex-container--between' : ' flex-container--end')}>
                         {useTimer && (
                             <div className={'timer'}>
                                 {remainingTime}
                             </div>
                         )}
-                        <div className={'flat-btn flat-btn--blue' + (choose ? ' flat-btn--pressed' : '')} >
-                            <div className={'flat-btn__caption'} onClick={() => this.onTempaiClick()}>Tempai!</div>
+                        <div className={'flex-container flex-container--end flex-container--no-margin'}>
+                            <div className={'flat-btn flat-btn--blue' + (processingState === ProcessingState.CHOOSE_KAN ? ' flat-btn--pressed' : '')} >
+                                <div className={'flat-btn__caption'} onClick={() => this.onKanClick()}>Kan!</div>
+                            </div>
+                            <div className={'flat-btn flat-btn--blue' + (processingState === ProcessingState.CHOOSE_TEMPAI ? ' flat-btn--pressed' : '')} >
+                                <div className={'flat-btn__caption'} onClick={() => this.onTempaiClick()}>Tempai</div>
+                            </div>
                         </div>
                     </div>
                     <HandVisual selectable={true} isOpenHand={false} reverse={invertTiles} hiddenTiles={hideTiles}/>

@@ -56,7 +56,7 @@ export class MemorizingScreen extends React.Component<any, MemorizingScreenState
                             </div>
                         )}
                         <div className={'flat-btn flat-btn--green'} >
-                            <div className={'flat-btn__caption'} onClick={() => this.goNext()}>Ready!</div>
+                            <div className={'flat-btn__caption'} onClick={() => this.goNext()}>Ready</div>
                         </div>
                     </div>
 

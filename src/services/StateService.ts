@@ -5,6 +5,7 @@ import signals from 'signals';
 import {TempaiService} from './TempaiService'
 import {SettingsStorage} from './SettingsStorage'
 import {Settings, SettingsType} from '../types/Settings'
+import {ProcessingState} from "../types/ProcessingState";
 
 export class StateService {
     private handService = new HandService()
@@ -16,14 +17,14 @@ export class StateService {
     private _currentScreen: ScreenType
     private previousScreen: ScreenType | undefined = undefined
     private showRules: boolean = false
-    private _chooseTempai: boolean = false
+    private processingState: ProcessingState = ProcessingState.IDLE
     private _remainingTime: number = 0
     private timer: NodeJS.Timeout | undefined = undefined
 
     onChange: signals.Signal = new signals.Signal()
     onHandChanged: signals.Signal = new signals.Signal()
     onTimeChanged: signals.Signal = new signals.Signal()
-    onChooseTempaiChanged: signals.Signal<boolean> = new signals.Signal()
+    onProcessingStateChanged: signals.Signal<ProcessingState> = new signals.Signal()
 
     private static _instance: StateService
     static get instance(): StateService {
@@ -157,22 +158,20 @@ export class StateService {
             if (this._currentScreen === ScreenType.MEMORIZING) {
                 this.nextScreen()
             } else if (this._currentScreen === ScreenType.PROCESSING) {
-                if (!this.tsumo) {
-                    throw new Error('has no tsumo to discard')
+                if (this.tsumo) {
+                    this.dropTile(-1)
+
+                    if (this.handService.hasTiles) {
+                        this.handService.nextTile()
+
+                        this.onHandChanged.dispatch()
+                        this.setTimer()
+                    } else {
+                        this.setScreen(ScreenType.FAIL)
+                    }
                 }
-
-                this.dropTile(-1)
-
-                if (this.handService.hasTiles) {
-                    this.handService.nextTile()
-
-                    this.onHandChanged.dispatch()
-                    this.setTimer()
-                } else {
-                    this.setScreen(ScreenType.FAIL)
-                }
-
-                this.chooseTempai(false)
+                this.processingState = ProcessingState.PROCESSING
+                this.onProcessingStateChanged.dispatch(this.processingState)
             }
         }
     }
@@ -186,17 +185,28 @@ export class StateService {
 
     private clear() {
         this.showRules = false
-        this._chooseTempai = false
+        this.processingState = this._currentScreen === ScreenType.PROCESSING
+            ? ProcessingState.PROCESSING
+            : ProcessingState.IDLE
+
         this.clearTimer()
         this._remainingTime = 0
     }
 
     selectTile(index: number) {
-        if (!this._chooseTempai) {
-            this.dropTileWithTimeout(index)
-        } else {
-            this.dropTile(index)
-            this.checkTempai()
+        switch (this.processingState) {
+            case ProcessingState.IDLE:
+                throw new Error('cannot select tile, incorrect processing state')
+            case ProcessingState.PROCESSING:
+                this.dropTileWithTimeout(index)
+                break
+            case ProcessingState.CHOOSE_TEMPAI:
+                this.dropTile(index)
+                this.checkTempai()
+                break
+            case ProcessingState.CHOOSE_KAN:
+                this.tryCallKan(index)
+                break
         }
     }
 
@@ -204,6 +214,18 @@ export class StateService {
         let str = this.handService.getStr()
         if (this.tempaiService.hasTempai(str)) {
             this.setScreen(ScreenType.SUCCESS)
+        } else {
+            this.setScreen(ScreenType.FAIL)
+        }
+    }
+
+    tryCallKan(index: number) {
+        let isValidCall = this.handService.tryCallKan(index)
+        if (isValidCall) {
+            this.processingState = ProcessingState.PROCESSING
+            this.onProcessingStateChanged.dispatch(this.processingState)
+            this.onHandChanged.dispatch()
+            this.setTimer()
         } else {
             this.setScreen(ScreenType.FAIL)
         }
@@ -232,9 +254,20 @@ export class StateService {
         }
     }
 
-    chooseTempai(value: boolean) {
-        this._chooseTempai = value
-        this.onChooseTempaiChanged.dispatch(value)
+    chooseTempaiClicked() {
+        this.processingState = this.processingState === ProcessingState.CHOOSE_TEMPAI
+            ? ProcessingState.PROCESSING
+            : ProcessingState.CHOOSE_TEMPAI
+
+        this.onProcessingStateChanged.dispatch(this.processingState)
+    }
+
+    chooseKanClicked() {
+        this.processingState = this.processingState === ProcessingState.CHOOSE_KAN
+            ? ProcessingState.PROCESSING
+            : ProcessingState.CHOOSE_KAN
+
+        this.onProcessingStateChanged.dispatch(this.processingState)
     }
 
     openRules() {

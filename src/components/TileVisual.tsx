@@ -55,7 +55,7 @@ export class TileVisual extends React.Component<TileVisualProps, TileVisualState
 
     render() {
      return (
-         <div className={`tile ${this.props.isTsumo ? ' tile--tsumo' : ''} ${this.props.isFallen ? ' tile--discard' : ''} ${this.props.highlighted ? ' tile--highlighted' : ''}`}
+         <div className={`tile ${this.props.isTsumo ? ' tile--tsumo' : ''} ${this.props.highlighted ? ' tile--highlighted' : ''}`}
               onClick={() => this.onTileSelected()}>
              <div className={'tile__inner'}>
                  {this.state.isDropped && (

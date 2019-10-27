@@ -4,7 +4,7 @@ export class WallGenerator {
     static generate() {
         let tiles = this.initTiles()
 
-        return this.randomShuffle(tiles).slice(0,30)
+        return this.randomShuffle(tiles).slice(0,34)
     }
 
     private static initTiles(): Tile[] {

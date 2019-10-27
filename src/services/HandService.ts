@@ -3,6 +3,7 @@ import {WallGenerator} from "./WallGenerator";
 
 export class HandService {
     private wall: Tile[] = []
+    private deadWall: Tile[] = []
     private hand: Tile[] = []
     private discard: DiscardTile[] = []
     private tsumo: Tile | undefined
@@ -17,7 +18,10 @@ export class HandService {
         this.trySortHand()
 
         this.wall = wall.slice(13)
+        this.deadWall = wall.slice(30)
+        console.log(this.deadWall.length)
         this.discard = []
+        this.kanTiles = []
         this.tsumo = undefined
 
         return this.getHand()
@@ -114,6 +118,28 @@ export class HandService {
         }
 
         return this.getHand()
+    }
+
+    tryCallKan(index: number): boolean {
+        if (!this.tsumo) {
+            return false
+        }
+
+        let allTiles = this.hand.slice().concat(this.tsumo)
+        let tile = index === -1 ? this.tsumo : this.hand[index]
+
+        let count = allTiles.filter(x => x.value === tile.value && x.suit === tile.suit).length
+        if (count !== 4) {
+            return false
+        }
+
+        this.kanTiles.push(tile)
+        this.hand = allTiles.filter(x => x.value !== tile.value || x.suit !== tile.suit)
+
+        this.tsumo = this.deadWall[0]
+        this.deadWall = this.deadWall.slice(1)
+
+        return true
     }
 
     private trySortHand() {

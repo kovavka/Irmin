@@ -40,7 +40,8 @@ export class HandVisual extends React.Component<HandProps, HandState> {
     updateState() {
         this.setState({
             tiles: this.props.reverse ? this.stateService.hand.reverse() : this.stateService.hand,
-            tsumo: this.stateService.tsumo
+            tsumo: this.stateService.tsumo,
+            kanTiles: this.stateService.kanTiles
         })
     }
 
