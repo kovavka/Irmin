@@ -9,6 +9,7 @@ type ProcessingScreenState = {
     hideTiles: boolean
     useTimer: boolean
     invertTiles: boolean
+    canCall: boolean
     processingState: ProcessingState
     remainingTime: string
     remainingTiles: string
@@ -24,6 +25,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
             hideTiles: this.stateService.hideTiles,
             useTimer: this.stateService.useTimer,
             invertTiles: this.stateService.invertTiles,
+            canCall: true,
             processingState: ProcessingState.PROCESSING,
             remainingTime: '0',
             remainingTiles: this.stateService.remainingTiles,
@@ -58,6 +60,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     onHandChanged() {
         this.setState({
             remainingTiles: this.stateService.remainingTiles,
+            canCall: Number(this.stateService.remainingTiles) >= 1
         })
     }
 
@@ -66,7 +69,9 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     onKanClick() {
-        this.stateService.chooseKanClicked()
+        if (this.state.canCall) {
+            this.stateService.chooseKanClicked()
+        }
     }
 
     onGiveUpClick() {
@@ -74,7 +79,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
     }
 
     render() {
-        const {hideTiles, useTimer, invertTiles, processingState, remainingTime, remainingTiles} = this.state
+        const {hideTiles, useTimer, invertTiles, canCall, processingState, remainingTime, remainingTiles} = this.state
         return (
             <div>
                 <div className={'page-header'}>
@@ -98,7 +103,7 @@ export class ProcessingScreen extends React.Component<any, ProcessingScreenState
                             </div>
                         )}
                         <div className={'flex-container flex-container--end flex-container--no-margin'}>
-                            <div className={'flat-btn flat-btn--blue' + (processingState === ProcessingState.CHOOSE_KAN ? ' flat-btn--pressed' : '')} >
+                            <div className={`flat-btn flat-btn--blue ${processingState === ProcessingState.CHOOSE_KAN ? 'flat-btn--pressed': ''} ${canCall ? '' : 'flat-btn--disabled'}`} >
                                 <div className={'flat-btn__caption'} onClick={() => this.onKanClick()}>Kan!</div>
                             </div>
                             <div className={'flat-btn flat-btn--blue' + (processingState === ProcessingState.CHOOSE_TEMPAI ? ' flat-btn--pressed' : '')} >

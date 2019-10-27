@@ -17,7 +17,7 @@ export class HandService {
         this.hand = wall.slice(0,13)
         this.trySortHand()
 
-        this.wall = wall.slice(13)
+        this.wall = wall.slice(13, 30)
         this.deadWall = wall.slice(30)
         console.log(this.deadWall.length)
         this.discard = []
@@ -125,7 +125,7 @@ export class HandService {
             return false
         }
 
-        let allTiles = this.hand.slice().concat(this.tsumo)
+        let allTiles = [this.tsumo, ...this.hand.slice()]
         let tile = index === -1 ? this.tsumo : this.hand[index]
 
         let count = allTiles.filter(x => x.value === tile.value && x.suit === tile.suit).length
@@ -135,6 +135,7 @@ export class HandService {
 
         this.kanTiles.unshift(tile)
         this.hand = allTiles.filter(x => x.value !== tile.value || x.suit !== tile.suit)
+        this.trySortHand()
 
         this.tsumo = this.deadWall[0]
         this.deadWall = this.deadWall.slice(1)

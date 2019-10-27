@@ -7,6 +7,8 @@ import {SettingsStorage} from './SettingsStorage'
 import {Settings, SettingsType} from '../types/Settings'
 import {ProcessingState} from "../types/ProcessingState";
 
+declare var window: any
+
 export class StateService {
     private handService = new HandService()
     private tempaiService = new TempaiService()
@@ -30,6 +32,7 @@ export class StateService {
     static get instance(): StateService {
         if (!this._instance) {
             this._instance = new StateService()
+            window.handService = this._instance.handService
         }
         return this._instance
     }

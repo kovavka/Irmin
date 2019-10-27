@@ -188,11 +188,9 @@ input {
   align-items: center;
   cursor: pointer;
 
-  .flat-btn--pressed {
-    webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-    box-shadow: inset 0px 0px 5px #c1c1c1;
-    outline: none;
+  &.flat-btn--disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 
   &.flat-btn--green {
