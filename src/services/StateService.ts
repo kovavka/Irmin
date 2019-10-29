@@ -259,7 +259,7 @@ export class StateService {
     }
 
     private tryInvertIndex(index: number) {
-        return this.invertTiles
+        return this.invertTiles && index !== -1
             ? this.handService.getHand().length - index - 1
             : index
     }
